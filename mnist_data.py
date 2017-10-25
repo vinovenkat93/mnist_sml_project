@@ -1,6 +1,6 @@
 from collections import namedtuple
 from sklearn.datasets import fetch_mldata
-import  numpy as np
+import numpy as np
 
 MNIST_data = namedtuple("MNIST_data", "data, targets")              
 
@@ -27,14 +27,19 @@ def MNIST_train_test_split(mnist):
     return mnist_train, mnist_test
 
 def MNIST_train_test_split_k(mnist, k):
-    train_indices = np.random.randint(0,70000,size=k)
+    train_indices = np.array([])
+    sample_per_class = k/10
+
+    for i in range(10):
+        current_label = np.argwhere(mnist.target == i)
+        train_indices = np.append(train_indices,current_label[:sample_per_class])
+        train_indices = train_indices.astype(int)
+
     mnist_train = MNIST_data(mnist.data[train_indices,:], mnist.target[train_indices])
     
-    test_indices = np.setdiff1d(np.arange(0,70000), train_indices)
-    test_indices = test_indices[0:10000]
+#    for i in xrange(10):
+#        print mnist_train.targets[(i*sample_per_class):(i*sample_per_class + 10)]
+    test_indices = np.arange(60000,70000)
     mnist_test = MNIST_data(mnist.data[test_indices], mnist.target[test_indices])
-    
-#    mnist_train = MNIST_data(mnist.data[0:k,:], mnist.target[0:k])
-#    mnist_test = MNIST_data(mnist.data[60000:,:], mnist.target[60000:])
     
     return mnist_train, mnist_test
