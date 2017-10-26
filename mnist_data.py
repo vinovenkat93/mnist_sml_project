@@ -5,7 +5,7 @@ import numpy as np
 MNIST_data = namedtuple("MNIST_data", "data, target")              
 
 def get_MNIST_data():
-    data_dir = "C:\\Users\\vinot\\Desktop"
+    data_dir = "D:\\Vinoth\\Course_work\\CS 578\\Project\\MNIST_Data"
     mnist = fetch_mldata('MNIST original', data_home = data_dir)
     return mnist
 
