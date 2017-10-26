@@ -1,14 +1,17 @@
 import mnist_data as mnist
 from sklearn.multiclass import OneVsRestClassifier, OneVsOneClassifier
 from sklearn.svm import SVC, LinearSVC
+import matplotlib.pyplot as plt
 from sklearn.ensemble import BaggingClassifier
 from sklearn import metrics
+import numpy as np
 import time
 
 mnist_all = mnist.get_MNIST_data()
 
 mnist_train = list()
 mnist_test = list()
+accuracy = np.array([])
 
 # Linear Kernal
 for k in xrange(60):    
@@ -26,7 +29,31 @@ for k in xrange(60):
     
     print "Execution Time for SVM (Linear Kernel: One vs. One): {}".format(execTime)                             
     y_pred = clf.predict(mnist_test_k.data)
-    print "Accuracy: {}".format(metrics.accuracy_score(mnist_test_k.target, y_pred))
+    
+    # Metrics
+    accuracy_i = metrics.accuracy_score(mnist_test_k.target, y_pred)    
+    accuracy = np.append(accuracy, accuracy_i)
+    
+    # ROC curves for each iteration for all classes
+#    y_score = clf.decision_function(mnist_test_k.data);
+#    fpr = dict()
+#    tpr = dict()
+#    plt.figure()
+#    
+#    for i in xrange(10):
+#        fpr[i], tpr[i], _ = metrics.roc_curve(mnist_test_k.target, y_score[:,i], pos_label = i)
+#        plt.plot(fpr[i], tpr[i], label='ROC curve for class %d' % i)
+#      
+#    plt.show() 
+    
+fig = plt.figure()
+plt.grid(linestyle='--')
+plt.plot(np.arange(1000,61000,1000), accuracy,'b')
+plt.title('Accuracy vs. number of samples',fontsize=14, fontweight='bold')
+plt.xlabel('Number of samples')
+plt.ylabel('Accuracy')
+plt.savefig('accuracy_vs_samples_linearsvm_default.png', dpi = 600)
+plt.show()
 
 # RBF kernel
 for k in xrange(60):    
