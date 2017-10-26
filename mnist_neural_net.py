@@ -15,6 +15,7 @@ for k in xrange(60):
 
     print "Number of training samples: {}".format((k+1)*1000)
 
+	# Multi-Layer Perceptron
     t0 = time.clock()
     mlp = MLPClassifier(hidden_layer_sizes=(50,), max_iter=10, alpha=1e-4,
                         solver='sgd', tol=1e-4, random_state=1,
