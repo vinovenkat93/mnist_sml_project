@@ -3,7 +3,7 @@ from sklearn.datasets import fetch_mldata
 from sys import platform
 from sklearn.decomposition import PCA
 import numpy as np
-import matplotlib.pyplot as plt
+from sys import platform
 
 MNIST_data = namedtuple("MNIST_data", "data, target")              
 
@@ -32,7 +32,7 @@ def MNIST_train_test_split_k(mnist, m, cv=False, k=0):
     sample_per_class = m/10
 
     # Trying to get same number of samples per label
-    for i in range(10):
+    for i in range(10): # class label
         current_label = np.argwhere(mnist.target[:60000] == i)
         
         # Checking if there is enough samples
