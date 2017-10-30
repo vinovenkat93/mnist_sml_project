@@ -131,7 +131,9 @@ def cross_validation_k_fold(C):
     accuracy = np.zeros(10)
     for k in xrange(10):
         
-        mnist_cv = mnist.MNIST_data(mnist_pca, mnist_all.target[:60000])
+#        mnist_cv = mnist.MNIST_data(mnist_pca, mnist_all.target[:60000])
+        mnist_cv = mnist.MNIST_data(mnist_all.data[:60000,:], mnist_all.target[:60000])
+        
         train,test = mnist.MNIST_train_test_split_k(mnist_cv,54000,True,k+1)
         accuracy[k], y_score = svm_linear_param_C(C,train,test)
         

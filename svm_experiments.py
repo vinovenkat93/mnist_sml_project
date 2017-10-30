@@ -31,8 +31,20 @@ for i in C:
     plt.show()
     
     k += 1
-# Accuracy/MSE for comparing regularization parameter (in SVM alone, KNN alone , etc,.)
+ 
+# Mean_accuracy plots
+mean_accuracy_ord = np.array([])
+mean_accuracy_ord = np.concatenate((mean_accuracy[:3],mean_accuracy[5:7],mean_accuracy[7:]))
+mean_accuracy_ord = np.insert(mean_accuracy_ord, 5,mean_accuracy[3])
+mean_accuracy_ord = np.insert(mean_accuracy_ord, 13,mean_accuracy[4])
+plt.figure()
+plt.plot(mean_accuracy_ord)
+plt.gca().set(xlabel='C (regularization)', ylabel='Mean Accuracy (10-fold CV)')
+plt.title('C (regularization) optimization using the 10-fold CV', fontweight='bold')    
+    
+# TODO: Accuracy/MSE for optimizing regularization parameter (KNN, Neural net)
+# TODO: ROC curves for comparing models (SVM vs. KNN vs. Neural)
 
-# ROC curves for comparing models (SVM vs. KNN vs. Neural)
+
 
 

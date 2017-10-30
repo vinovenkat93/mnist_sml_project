@@ -1,5 +1,6 @@
 from collections import namedtuple
 from sklearn.datasets import fetch_mldata
+from sys import platform
 from sklearn.decomposition import PCA
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,7 +8,11 @@ import matplotlib.pyplot as plt
 MNIST_data = namedtuple("MNIST_data", "data, target")              
 
 def get_MNIST_data():
-    data_dir = "D:\\Vinoth\\Course_work\\CS 578\\Project\\MNIST_Data"
+    if platform == "darwin": # Mac OS
+        data_dir = "../MNIST_Data"
+    elif platform == "win32": # Windows
+        data_dir = "D:\\Vinoth\\Course_work\\CS 578\\Project\\MNIST_Data"
+
     mnist = fetch_mldata('MNIST original', data_home = data_dir)
     return mnist
 
@@ -18,6 +23,11 @@ def MNIST_train_test_split(mnist):
     return mnist_train, mnist_test
 
 def MNIST_train_test_split_k(mnist, m, cv=False, k=0):
+    """
+    :param mnist: data.
+    :param k: Number of training samples.
+    :return: train, test data.
+    """
     train_indices = np.array([])
     sample_per_class = m/10
 
@@ -26,6 +36,7 @@ def MNIST_train_test_split_k(mnist, m, cv=False, k=0):
         current_label = np.argwhere(mnist.target[:60000] == i)
         
         # Checking if there is enough samples
+        # Add at most @sample_per_class samples for each class in @train_indices.
         if np.size(current_label) < sample_per_class: # Not enough samples for the current label
             train_indices = np.append(train_indices,current_label)
         else:
@@ -40,6 +51,10 @@ def MNIST_train_test_split_k(mnist, m, cv=False, k=0):
                 train_indices = np.append(train_indices,current_label[remain_cv_train])
     
     # Adding additional samples to get 'm' total samples
+    # TODO: Do we need to do this? Adding additional samples will result
+    # TODO: in more than @sample_per_class samples for some classes.
+    # RVD: That's true. I had it here for borderline cases otherwise we'll never   
+    # RVD: have all the 60000 samples if we call the function with say m = 60000 
     if np.size(train_indices) < m:
         remain_data = np.setdiff1d(np.arange(60000),train_indices)
         train_indices = np.append(train_indices,remain_data[:(m - np.size(train_indices))])
@@ -58,7 +73,7 @@ def MNIST_train_test_split_k(mnist, m, cv=False, k=0):
 
 def MNIST_pca(mnist):
     variance = 0
-    n_components = 87
+    n_components = 87 # Changed from '5' for a faster run
  
     variance_arr = np.array([])
     n_components_arr = np.array([])
