@@ -1,9 +1,9 @@
 from collections import namedtuple
 from sklearn.datasets import fetch_mldata
-from sys import platform
 from sklearn.decomposition import PCA
 import numpy as np
 from sys import platform
+import matplotlib.pyplot as plt
 
 MNIST_data = namedtuple("MNIST_data", "data, target")              
 
