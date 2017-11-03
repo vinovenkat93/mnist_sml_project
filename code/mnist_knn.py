@@ -16,7 +16,7 @@ knn_accuracy = np.zeros((9,10), dtype=float)
 knn_training_data_class_count = np.zeros((10,10), dtype=float)
 knn_test_data_class_count = np.zeros((10,10), dtype=float)
 
-def k_fold_cross_validation_for_choosing_k_in_knn():
+def k_fold_cross_validation_for_choosing_k_in_knn():#CV with stratification
     k_values = [1,2,3,4,5,10,15,20,25]# Differenet values of k for knn
 
     cv_obj = mnist.MNIST_CV_Stratified(mnist_all) # Getting the MNIST_CV_Stratified object from mnist_all data
@@ -61,11 +61,12 @@ def k_fold_cross_validation_for_choosing_k_in_knn():
 
 
 def k_fold_cross_validation_for_choosing_k_in_knn_exp1():
+    k_values = [1,2,3,4,5,10,15,20,25]
     for tss in xrange(6):
 
         mnist_train_k, mnist_test_k = mnist.MNIST_train_test_split_k(mnist_all, (tss + 1)*10000)
 
-        for k in range(len(k_values)):# Running KNN for different values of k for all 60000 training data.
+        for k in range(len(k_values)):
 
             print "Number of training samples: {}".format(len(mnist_train_k.data))
             print "Number of test samples:{}".format(len(mnist_test_k.data))
@@ -93,7 +94,41 @@ def k_fold_cross_validation_for_choosing_k_in_knn_exp1():
     np.savetxt("knn_training_times_varied_tss.csv", knn_training_time, delimiter=",", fmt="%.3f")
     np.savetxt("knn_prdiction_times_varied_tss.csv", knn_prdiction_time, delimiter=",", fmt="%.3f")
     np.savetxt("knn_accuracy_varied_tss.csv", knn_accuracy, delimiter=",", fmt="%.3f")
-    #plot_results(tss, accuracy)
+
+
+def k_fold_cross_validation_for_choosing_k_in_knn_exp3():
+    k_values = [1,2,3,4,5,10,15,20,25]
+    for k in range(len(k_values)):
+        for i in range(len(NFOLDS)):# Running KNN for different values of k with cv without stratification.
+
+            mnist_train_k, mnist_test_k = mnist.MNIST_train_test_split_k_fold(mnist_all, NFOLDS, i)
+
+            print "Number of training samples: {}".format(len(mnist_train_k.data))
+            print "Number of test samples:{}".format(len(mnist_test_k.data))
+
+            # Nearest neighbor
+            t0 = time.clock()
+            knn = KNeighborsClassifier(n_neighbors = k_values[k], n_jobs=NCORES)
+            knn.fit(mnist_train_k.data, mnist_train_k.target)
+            execTime = time.clock() - t0
+            knn_training_time[k][i] = execTime
+
+            print "Execution Time for Nearest Neighbor: {}".format(execTime)
+
+            t0 = time.clock()
+            y_pred = knn.predict(mnist_test_k.data)
+            execTime = time.clock() - t0
+            knn_prdiction_time[k][i] = execTime
+
+            print "Execution Time for Nearest Neighbor Prediction: {}".format(execTime)
+
+            print "Accuracy: {}".format(metrics.accuracy_score(mnist_test_k.target, y_pred))
+            knn_accuracy[k][i] = metrics.accuracy_score(mnist_test_k.target, y_pred)
+
+
+    np.savetxt("../experiments/knn_accuracy_varied_cv.csv", knn_training_time, delimiter=",", fmt="%.3f")
+    np.savetxt("knn_training_times_cv.csv", knn_prdiction_time, delimiter=",", fmt="%.3f")
+    np.savetxt("knn_prdiction_times_cv.csv", knn_accuracy, delimiter=",", fmt="%.3f")
 
 
 def knn_expt_for_varied_tss():
