@@ -9,7 +9,7 @@ NUMBER_OF_CLASSES = 10
 
 def get_MNIST_data():
     if platform == "darwin": # Mac OS
-        data_dir = "../MNIST_Data"
+        data_dir = "../../MNIST_Data"
     elif platform == "win32": # Windows
         data_dir = "D:\\Vinoth\\Course_work\\CS 578\\Project\\MNIST_Data"
     else:
