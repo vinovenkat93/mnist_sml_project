@@ -40,7 +40,7 @@ def svm_linear_samples():
         y_score = clf.decision_function(mnist_test_k.data);
         
         # Plot ROC curves
-        fig_filename = "SVM_linear_ROC_samples_{}.png".format((k+1)*1000)
+        fig_filename = ".\Results_Plots\SVM_linear_ROC_samples_{}.png".format((k+1)*1000)
         fig_title = "ROC_Linear_SVM"
         res.plot_ROC_curve(mnist_test_k.target, y_score, fig_filename, fig_title)
             
@@ -50,7 +50,7 @@ def svm_linear_samples():
     plt.title('Accuracy vs. number of samples',fontsize=14, fontweight='bold')
     plt.xlabel('Number of samples')
     plt.ylabel('Accuracy')
-    plt.savefig('accuracy_vs_samples_linearsvm_default.png', dpi = 600)
+    plt.savefig('.\Results_Plots\accuracy_vs_samples_linearsvm_default.png', dpi = 600)
     plt.show()
             
 # RBF kernel
@@ -80,7 +80,7 @@ def svm_rbf_samples():
         y_score = clf.decision_function(mnist_test_k.data);
         
         # Plot ROC curves
-        fig_filename = "SVM_RBF_ROC_samples_{}.png".format((k+1)*1000)
+        fig_filename = ".\Results_Plots\SVM_RBF_ROC_samples_{}.png".format((k+1)*1000)
         fig_title = "ROC_RBF_SVM"
         res.plot_ROC_curve(mnist_test_k.target, y_score, fig_filename, fig_title)
             
@@ -90,7 +90,7 @@ def svm_rbf_samples():
     plt.title('Accuracy vs. number of samples',fontsize=14, fontweight='bold')
     plt.xlabel('Number of samples')
     plt.ylabel('Accuracy')
-    plt.savefig('accuracy_vs_samples_linearsvm_default.png', dpi = 600)
+    plt.savefig('.\Results_Plots\accuracy_vs_samples_rbfsvm_default.png', dpi = 600)
     plt.show()                        
 
 # SVM Ensembles RBF
@@ -139,7 +139,7 @@ def cross_validation_k_fold(C):
         
         print "Accuracy = {} for k = {} and C = {}".format(accuracy[k],k+1,C)
         
-        filename = 'SVM_linear_ROC_C_{}_k_{}.png'.format(C,k+1)
+        filename = '.\Results_Plots\SVM_linear_ROC_C_{}_k_{}.png'.format(C,k+1)
         title = 'ROC_Linear_SVM'
         res.plot_ROC_curve(test.target,y_score,filename,title, True)
         

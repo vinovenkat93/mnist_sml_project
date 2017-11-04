@@ -45,7 +45,7 @@ def neural_net_samples():
     plt.title('Accuracy vs. number of samples',fontsize=14, fontweight='bold')
     plt.xlabel('Number of samples')
     plt.ylabel('Accuracy')
-    plt.savefig('accuracy_vs_samples_neural_net_default.png', dpi = 600)
+    plt.savefig('.\Results_Plots\accuracy_vs_samples_neural_net_default.png', dpi = 600)
     plt.show()
 
 """
@@ -112,16 +112,16 @@ def cross_validation_k_fold(alpha = 'default', act_fcn = 'default', learn_rate =
         # Filename based on param being optimized
         if a == 1 and ac == 1:
             print "Accuracy = {} for k = {} and Learn_rate = {}".format(accuracy[k],k+1,learn_rate)
-            filename = 'Neural_Net_linear_ROC_Learn_rate_{}_k_{}.png'.format(learn_rate,k+1)
+            filename = '.\Results_Plots\Neural_Net_linear_ROC_Learn_rate_{}_k_{}.png'.format(learn_rate,k+1)
         elif a == 1 and l == 1:
             print "Accuracy = {} for k = {} and Activation_fcn = {}".format(accuracy[k],k+1,act_fcn)
-            filename = 'Neural_Net_linear_ROC_Activation_fcn_{}_k_{}.png'.format(act_fcn,k+1)
+            filename = '.\Results_Plots\Neural_Net_linear_ROC_Activation_fcn_{}_k_{}.png'.format(act_fcn,k+1)
         elif l == 1 and ac == 1:
             print "Accuracy = {} for k = {} and Alpha = {}".format(accuracy[k],k+1,alpha)
-            filename = 'Neural_Net_linear_ROC_Alpha_{}_k_{}.png'.format(alpha,k+1)
+            filename = '.\Results_Plots\Neural_Net_linear_ROC_Alpha_{}_k_{}.png'.format(alpha,k+1)
         else:
             print "Accuracy = {} for k = {} and Alpha = {}, Activation_fcn = {}, Learn_rate = {}".format(accuracy[k],k+1,alpha,act_fcn,learn_rate)
-            filename = 'Neural_Net_linear_ROC_Alpha_{}_Act_fcn_{}_Learn_rate_{}_k_{}.png'.format(alpha,act_fcn,learn_rate,k+1)
+            filename = '.\Results_Plots\Neural_Net_linear_ROC_Alpha_{}_Act_fcn_{}_Learn_rate_{}_k_{}.png'.format(alpha,act_fcn,learn_rate,k+1)
         
         # Generate ROC plot (all_classes, k-folds)
         title = 'ROC_Neural_Net'
