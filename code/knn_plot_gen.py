@@ -36,7 +36,7 @@ def plot_accuracy(accuracy_file_name):
     '''
     x = np.arange(accuracy_values.shape[0])
     n = accuracy_values.shape[1]
-    x_labels = np.array([1,2,3,4,5,10,15,20,25])
+    x_labels = np.array([1,10,20,30,40,50,60,70,80,90,100]) #np.array([1,2,3,4,5,10,15,20,25])
 
     plt.errorbar(x, accuracy_values.mean(axis=1), yerr=accuracy_values.std(axis=1)/np.sqrt(n),
                  label='Accuracy')
@@ -53,9 +53,9 @@ def plot_accuracy(accuracy_file_name):
 
     plt.xticks(x, x_labels)
     plt.legend(loc='upper right')
-    plt.xlabel("K")
+    plt.xlabel("Training Data Percentage")
     plt.ylabel("Accuracy")
-    plt.savefig("../experiments/exp5/plot_accuracy_vs_k_with_all_k_values.pdf", bbox_inches='tight')
+    plt.savefig("../experiments/exp6/plot_accuracy_vs_tss_with_fixed_k.pdf", bbox_inches='tight')
     '''
     plt.clf()
     plt.errorbar(x, training_values.mean(axis=1), yerr=training_values.std(axis=1)/np.sqrt(n),
@@ -146,7 +146,7 @@ def main():
     #plot_accuracy("./experiments/knn_accuracy_varied_cv.csv","./experiments/knn_accuracy_varied_cv_k234.csv", "./experiments/knn_training_times_cv.csv",
     #             "./experiments/knn_prdiction_times_cv.csv")
 
-    plot_accuracy("../experiments/exp5/knn_accuracy_varied_cv_different_k.csv")
+    plot_accuracy("../experiments/exp6/knn_accuracy_different_tss.csv")
 
 
 if __name__=="__main__":

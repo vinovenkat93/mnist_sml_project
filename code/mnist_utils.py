@@ -118,15 +118,15 @@ class MNIST_Random_Sample_Stratified:
         number_of_data_per_class_in_train = [None] * NUMBER_OF_CLASSES;
 
         for i in range(NUMBER_OF_CLASSES):
-            self.number_of_data_per_class_in_train[i] = np.argwhere(self.mnist_train.target[:] == i).flatten()
-            number_of_data_per_class_in_train[i] = len(self.number_of_data_per_class_in_train[i])
+            self.indices_per_class_in_train[i] = np.argwhere(self.mnist_train.target[:] == i).flatten()
+            number_of_data_per_class_in_train[i] = len(self.indices_per_class_in_train[i])
 
         number_of_data_per_class_in_train = np.array(number_of_data_per_class_in_train)
         print 'percent data per class in train:', \
             (number_of_data_per_class_in_train / float(len(self.mnist_train.target))) * 100
 
 
-    def get_percentage_of_train_data(self, training_data_percentage):
+    def sample_train_data(self, training_data_percentage):
         """
         :param mnist_data: data.
         :param training_data_percentage: Training data percentage for varied tss experiment
@@ -138,20 +138,18 @@ class MNIST_Random_Sample_Stratified:
 
         for i in range(NUMBER_OF_CLASSES):
             num_of_data_per_class = int(len(self.indices_per_class_in_train[i]) * training_data_percentage)
-            np.random.shuffle(self.indices_per_class_in_train[i])
+            # Randomly sampling num_of_data_per_class data from each class
+            indices_i = np.random.choice(self.indices_per_class_in_train[i], size=num_of_data_per_class, replace=False)
+            training_set_indices.extend(indices_i)
 
-            training_set_indices.extend(self.indices_per_class_in_train[i][:num_of_data_per_class])
+        mnist_train_sampled = MNIST_data(self.mnist_train.data[training_set_indices, :],
+                                         self.mnist_train.target[training_set_indices])
 
-
-        mnist_train = MNIST_data(self.mnist_train.data[training_set_indices, :], self.mnist_train.target[training_set_indices])
-
-        #print "==== Fold: %d ====" % fold_no
-        #print "train labels:", mnist_train.target
-        #print "test labels:", mnist_test.target
+        #print "==== Percentage: %f ====" % training_data_percentage
+        #print "train labels:", mnist_train_sampled.target
         #print "train indices:", training_set_indices
-        #print "test indices:", test_set_indices
 
-        return mnist_train, self.mnist_test
+        return mnist_train_sampled, self.mnist_test
 
 
 
@@ -161,12 +159,15 @@ def main():
 
     #data = np.random.randn(20, 2)
     #target = np.array([0, 0, 1, 1, 1, 2, 2, 2, 0, 1] * 2)
-    #mnist_data = MNIST_data(data, target)
+    mnist_data = MNIST_data(data, target)
 
     #cv_obj = MNIST_CV_Stratified(mnist_data)
 
     #for i in range(nfolds):
      #   cv_obj.get_train_test_split(nfolds, i)
+
+    #sample_obj = MNIST_Random_Sample_Stratified(mnist_data)
+    #sample_obj.sample_train_data(0.5)
     pass
 
 
