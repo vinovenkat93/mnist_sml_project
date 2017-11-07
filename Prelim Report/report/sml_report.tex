@@ -49,7 +49,7 @@ is described next.
 \subsection*{Data set Preprocessing}
 The MNIST data set, which is a subset of a bigger data set from National Institute of Standards and Technology (NIST),
 is a collection of handwritten digits, each between 0 to 9, and is commonly used as a benchmark data set for evaluating various image processing systems.
-The data set has a training set of 60,000 examples, and a test set of 10,000 examples.
+The data set is preprocessed and has a training set of 60,000 examples, and a test set of 10,000 examples. The pre-processing details are described next.
 
 The original NIST data set which was black and white (i.e. had only two levels) was first processed to fit into a $20 \times 20$ pixel image. 
 Each image was then smoothed (anti-aliased) to obtain a grey-scale image which was then centered in a $28 \times 28$ pixel box.
@@ -148,7 +148,7 @@ From the plots we see that, the hyper-parameter C for SVM was selected to be $\m
 \end{figure}
 
 \paragraph{Effect of number of samples on accuracy.}
-For this experiment,  we progressively varied the fraction of samples used for training from 1\% to 100\% out of the entire 60,000 samples using randomized stratified sampling, taking the fraction of data from each class (digits 0-9) and combining them to form the training data and computed the accuracy on the test data (fixed size 10,000) for each case. Here we fixed the hyper-parameters for respective algorithm found using CV. The results are shown in Figure \ref{fig:svm_knn_accuracy_tss}.
+For this experiment,  we progressively varied the fraction of samples used for training from 1\% to 100\% out of the entire 60,000 samples using randomized stratified sampling, taking the fraction of data from each class (digits 0-9) and combining them to form the training data and computed the accuracy on the test data (fixed size 10,000) for each case. Here we fixed the hyper-parameters for respective algorithm found using CV. The results are shown in Figure \ref{fig:1}.
 
 From the plots we see that, approximately 20\% (12,000) of the training data points (60,000) is required for high accuracy. After 20\% data points, the accuracy 
 almost remains in the same range even if we increase the number of training data points.
@@ -184,14 +184,18 @@ From the plot we can see that the number PCA features are 87 out of 784 features
 \caption{PCA features. \label{fig:pca_features}}
 \end{figure}
 \section*{Work In-progress}
+We plan to do the following for our final report:
 \begin{itemize}
-\item We will generate some of the plots again with proper error bars. 
-\item We would run several experiments to plot ROC curves for different algorithms.
-\item We would run few experiments for all algorithms on the PCA features. 
-\item Finally we would  run 10-fold cross validation for all the algorithms to do hypothesis testing to compare different algorithms.
-\item We will include representative ROC curves for the 10-fold cross validation used for parameter tuning and for the test data-set that we would use for the hypothesis testing for choosing the best algorithm.
-\item We will try to run more experiments for SVM (using RBF kernels) and generate results (This is tentative and we might not be able to finish it).
-\item We will include data about run-times for different algorithms / parameter settings and discuss how that might be a deciding factor in selecting the parameters for different algorithms.
+\item Generate some of the plots again with proper error bars. 
+%\item Run several experiments to plot ROC curves for different algorithms.
+\item Run experiments for all algorithms on the PCA features. 
+\item Run 10-fold cross validation for all the algorithms to do hypothesis testing to compare performance of different algorithms.
+\item Run several experiments to plot representative ROC curves for the 10-fold cross validation used for parameter tuning and for the test data-set that we would use for the hypothesis testing for choosing the best algorithm.
+%\item Run more experiments for SVM (using RBF kernels) and generate results (This is tentative and we might not be able to finish it).
+%\item We will include data about run-times for different algorithms / parameter settings and discuss how that might be a deciding factor in selecting the parameters for different algorithms.
+
+
+\item Analysis of the experiments i.e. analyzing which algorithm performs best under which regime.
 \end{itemize} 
 \end{document}
 
