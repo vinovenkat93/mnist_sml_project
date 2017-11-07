@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from sklearn import metrics
 import numpy as np
 import result_gen as res
+import mnist_utils
 import time
 
 mnist_all = mnist.get_MNIST_data()
@@ -14,7 +15,7 @@ mnist_test = list()
 """
 Studying the effect of samples
 """
-def neural_net_samples():
+def neural_net_samples(alpha):
     accuracy = np.array([])
     for k in xrange(60):  
         mnist_train_k, mnist_test_k = mnist.MNIST_train_test_split_k(mnist_all, (k + 1)*1000)
@@ -25,7 +26,7 @@ def neural_net_samples():
         
         # One hidden layer with 100 neurons.
         t0 = time.clock()
-        mlp = MLPClassifier(hidden_layer_sizes=(100), max_iter=200, alpha=1e-4,
+        mlp = MLPClassifier(hidden_layer_sizes=(100), max_iter=200, alpha=alpha,
                             solver='sgd', tol=1e-4, random_state=1,
                             learning_rate_init=.001)
         mlp.fit(mnist_train_k.data, mnist_train_k.target)
@@ -45,7 +46,7 @@ def neural_net_samples():
     plt.title('Accuracy vs. number of samples',fontsize=14, fontweight='bold')
     plt.xlabel('Number of samples')
     plt.ylabel('Accuracy')
-    plt.savefig('.\Results_Plots\accuracy_vs_samples_neural_net_default.png', dpi = 600)
+    plt.savefig('..\Results_Plots\accuracy_vs_samples_neural_net_default.png', dpi = 600)
     plt.show()
 
 """
@@ -75,15 +76,19 @@ def neural_net_opt(alpha, act_fcn, learn_rate, train, test):
     mlp = MLPClassifier(hidden_layer_sizes=(100), max_iter=200, alpha=alpha,
                             solver='sgd', tol=1e-4, random_state=1,
                             learning_rate_init=learn_rate, activation=act_fcn)
+    t0 = time.clock()
     mlp.fit(train.data, train.target)
+    execTime_train = time.clock() - t0
     
+    t0 = time.clock()
     y_pred = mlp.predict(test.data)
+    execTime_predict = time.clock() - t0
     
     # Metrics
     accuracy = metrics.accuracy_score(test.target, y_pred)
     y_score = mlp.predict_proba(test.data);
     
-    return accuracy, y_score
+    return accuracy, y_score, execTime_train, execTime_predict
     
 """
 10-fold CV for param optimization
@@ -97,34 +102,39 @@ def cross_validation_k_fold(alpha = 'default', act_fcn = 'default', learn_rate =
     """
     a = 0; l = 0; ac = 0
     accuracy = np.zeros(10)
+    train_time = np.zeros(10)
+    predict_time = np.zeros(10)
+    
+    mnist_cv = mnist_all
+    cv_obj = mnist_utils.MNIST_CV_Stratified(mnist_cv)
     for k in xrange(10):
         
-        #        mnist_cv = mnist.MNIST_data(mnist_pca, mnist_all.target[:60000])
-        mnist_cv = mnist.MNIST_data(mnist_all.data[:60000,:], mnist_all.target[:60000])
-
-        train,test = mnist.MNIST_train_test_split_k(mnist_cv,54000,True,k+1)
+#        mnist_cv = mnist.MNIST_data(mnist_pca, mnist_all.target[:60000])
+#        mnist_cv = mnist.MNIST_data(mnist_all.data[:60000,:], mnist_all.target[:60000])
+#        train,test = mnist.MNIST_train_test_split_k(mnist_cv,54000,True,k+1)
+        train, test = cv_obj.get_train_test_split(10, k)
         if alpha == 'default': alpha = 1e-4; a = 1
         if learn_rate == 'default': learn_rate = 1e-3; l = 1
         if act_fcn == 'default': act_fcn = 'relu'; ac = 1
         
-        accuracy[k], y_score = neural_net_opt(alpha, act_fcn, learn_rate, train, test)
+        accuracy[k], y_score, train_time[k], predict_time[k] = neural_net_opt(alpha, act_fcn, learn_rate, train, test)
         
         # Filename based on param being optimized
         if a == 1 and ac == 1:
             print "Accuracy = {} for k = {} and Learn_rate = {}".format(accuracy[k],k+1,learn_rate)
-            filename = '.\Results_Plots\Neural_Net_linear_ROC_Learn_rate_{}_k_{}.png'.format(learn_rate,k+1)
+            filename = '..\Results_Plots\Neural_Net_linear_ROC_Learn_rate_{}_k_{}.png'.format(learn_rate,k+1)
         elif a == 1 and l == 1:
             print "Accuracy = {} for k = {} and Activation_fcn = {}".format(accuracy[k],k+1,act_fcn)
-            filename = '.\Results_Plots\Neural_Net_linear_ROC_Activation_fcn_{}_k_{}.png'.format(act_fcn,k+1)
+            filename = '..\Results_Plots\Neural_Net_linear_ROC_Activation_fcn_{}_k_{}.png'.format(act_fcn,k+1)
         elif l == 1 and ac == 1:
             print "Accuracy = {} for k = {} and Alpha = {}".format(accuracy[k],k+1,alpha)
-            filename = '.\Results_Plots\Neural_Net_linear_ROC_Alpha_{}_k_{}.png'.format(alpha,k+1)
+            filename = '..\Results_Plots\Neural_Net_linear_ROC_Alpha_{}_k_{}.png'.format(alpha,k+1)
         else:
             print "Accuracy = {} for k = {} and Alpha = {}, Activation_fcn = {}, Learn_rate = {}".format(accuracy[k],k+1,alpha,act_fcn,learn_rate)
-            filename = '.\Results_Plots\Neural_Net_linear_ROC_Alpha_{}_Act_fcn_{}_Learn_rate_{}_k_{}.png'.format(alpha,act_fcn,learn_rate,k+1)
+            filename = '..\Results_Plots\Neural_Net_linear_ROC_Alpha_{}_Act_fcn_{}_Learn_rate_{}_k_{}.png'.format(alpha,act_fcn,learn_rate,k+1)
         
         # Generate ROC plot (all_classes, k-folds)
         title = 'ROC_Neural_Net'
         res.plot_ROC_curve(test.target,y_score,filename,title, True)
         
-    return accuracy
+    return accuracy, train_time, predict_time
