@@ -1,8 +1,0 @@
-import neural_net_experiments
-import svm_experiments
-
-#neural_net_experiments.k_fold_CV_regularization_Neural_Net()
-neural_net_experiments.k_fold_CV_Activation_fcn_Neural_Net()
-neural_net_experiments.k_fold_CV_Learn_rate_Neural_Net()
-
-svm_experiments.k_fold_CV_regularization_SVM()
