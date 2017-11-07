@@ -9,6 +9,10 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{hyperref}
+%\usepackage{subfigure}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amssymb}
 
 \setlength{\parskip}{1em}  % Increase paragraph spacing.
 \setlength\parindent{0pt}   % No indentation before paragraph.
@@ -72,14 +76,14 @@ of learning ${k \choose 2}$ binary classifiers. We train each binary classifier 
 & \text{ subject to } \quad  0 \leq \alpha_i \leq C, i=1,\ldots,n, \;  \sum_{i=1}^{n} \alpha_i y_i = 0,
 \end{align*}
 where $\alpha_i$ and $\alpha_j$ are non-negative Lagrange multipliers  used to enforce the classification constraints, 
-$y_i$ and$y_j$ are predicted labels for data points $\vx_i$  and $\vx_j$ and $K$ is the kernel function. 
+$y_i$ and$y_j$ are predicted labels for data points $\vx_i$  and $\vx_j$ and $K$ is the kernel function.  
 
 The prediction $y$ for a test data point $\vx \in \dX$, for each binary classifier, is then obtained as follows:
 \begin{align*}
 y = \mathrm{sign} \left( \sum_{i=1}^n \hat{\alpha}_i y_i K(\vx, \vx_i) \right)
 \end{align*}
-Finally, the class which received the most votes is selected as the predicted label. We evaluated both linear and RBF kernels
-in our experiments.  We used \texttt{scikit-learn} python package for an implementation of the above.
+Finally, the class which received the most votes is selected as the predicted label. We have evaluated the performance of the \textbf{linear kernel}
+in our experiments. We used \texttt{scikit-learn} python package for an implementation of the above.
 
 \subsection*{K-Nearest Neighbors}
 K-nearest neighbors (KNN) is a popular non-parameteric classification algorithm which predicts the label of data point
@@ -89,7 +93,9 @@ During prediction, the constructed tree is queried to find the $K$ nearest neigh
  and then the majority label is predicted as the class label of the test data point. We use uniform weighting for computing the votes.
 
 \subsection*{Neural networks}
-%TODO: 
+Neural Network / Multi-Layer Perceptron (MLP) is a supervised learning algorithm that uses multiple layers of neurons (perceptrons) to learn a non-linear function $f(\cdot):\mathbb{R}^{d} \rightarrow \mathbb{R}^{k}$. It differs from logistic regression by having multiple non-linear layers between the input layer and the output layer. In our case, the input layer has a dimension of 784(d) and the output layer has a dimension of 10(k - classes). Given training data, we use backpropagation to learn the weights and biases of the perceptrons in the neural network by optimizing a cost function.
+
+When a new test point comes in, we predict the class it belongs based on the output array (k-dimensional) from the output layer by looking at the class which has the highest vote. Various parameters like the learning rate, the activation function for the perceptrons and regularization affect the performance of the neural networks and we use a 10-fold cross-validation approach to tune these parameters. 
 
 
 \section*{Experimental Set-up}
@@ -116,18 +122,24 @@ The experimental set-up for 10 fold cross validation, effect of varying number o
  
 \section*{Experiments} 
 \paragraph{10-Fold Cross Validation For Parameter Tuning.}
-For 10-fold cross validation we used stratified sampling using all 70,000 MNIST data. We first divided the whole data into 10 groups (data belonging to each digit from 0-9). Then  for each fold in 10-fold CV, we picked one fold from each group and combined them to form our test data set (approximately 7,000 data points) and rest of the data i.e. the other 9-fold were our training data set (approximately 63,000 data points). The results are shown in Figure \ref{fig:svm_knn_cv} and \ref{fig:nn_cv}.
+For 10-fold cross validation we used stratified sampling using all 70,000 MNIST data. We first divided the whole data into 10 groups (data belonging to each digit from 0-9). Then  for each fold in 10-fold CV, we picked one fold from each group and combined them to form our test data set (approximately 7,000 data points) and rest of the data i.e. the other 9-folds were our training data set (approximately 63,000 data points). The results are shown in Figure \ref{fig:svm_knn_cv} and \ref{fig:nn_cv}.
 
-From the plots we see that, the hyper-parameter C for SVM was selected to be TODO:fill this value, value of K for KNN was selected to be 3 since the accuracy is highest at K=3, and the hyperparameters for Neural networks were found to be TODO:fill this up.
+From the plots we see that, the hyper-parameter C for SVM was selected to be $\mathbf{70}$, value of K for KNN was selected to be $\mathbf{3}$ since the accuracy is highest at K=3, and in case of the neural networks, the following configuration was chosen: 
 
-\begin{figure}
+\begin{itemize}
+\item Regularization parameter ($\alpha$): $100$
+\item Activation function: Logistic
+\item Learning rate ($\eta$): 0.0003
+\end{itemize}
+
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.5\linewidth]{figures/SVM_regularization_C_mean_acc.png}
-\includegraphics[width=0.45\linewidth]{figures/KNN_accuracy_vs_k_with_all_k_values.pdf}
+\includegraphics[width=0.45\linewidth]{figures/SVM_regularization_C_mean_acc.png}
+\includegraphics[width=0.4\linewidth]{figures/KNN_accuracy_vs_k_with_all_k_values.pdf}
 \caption{(Left) CV for SVM. (Right) CV for KNN. \label{fig:svm_knn_cv}}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.33\linewidth]{figures/Neural_net_act_fcn_mean_acc.png}%
 \includegraphics[width=0.33\linewidth]{figures/Neural_net_learn_rate_mean_acc.png}%
@@ -140,11 +152,25 @@ For this experiment,  we progressively varied the fraction of samples used for t
 
 From the plots we see that, approximately 20\% (12,000) of the training data points (60,000) is required for high accuracy. After 20\% data points, the accuracy 
 almost remains in the same range even if we increase the number of training data points.
-\begin{figure}
-\centering
-\includegraphics[width=0.5\linewidth]{figures/accuracy_vs_samples_linearsvm_default.png}%[width=0.5\linewidth]
-\includegraphics[width=0.45\linewidth]{figures/KNN_accuracy_vs_tss_with_fixed_k.pdf}%
-\caption{(Left) Training set size vs accuracy for SVM. (Right) Training set size vs accuracy for KNN. \label{fig:svm_knn_accuracy_tss}}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.4\linewidth}
+		\centering
+		\includegraphics[width=1\linewidth]{figures/accuracy_vs_samples_linearsvm_default.png}
+		\caption{SVM}\label{fig:1a}		
+	\end{subfigure}
+	\begin{subfigure}{0.35\linewidth}
+		\centering
+		\includegraphics[width=1\linewidth]{figures/KNN_accuracy_vs_tss_with_fixed_k.pdf}
+		\caption{KNN}\label{fig:1b}
+	\end{subfigure}
+	\begin{subfigure}{0.4\linewidth}
+		\centering
+		\includegraphics[width=1\linewidth]{figures/accuracy_vs_samples_neural_net_default}
+		\caption{Neural Network}\label{fig:1b}
+	\end{subfigure}
+	\caption{Training set size vs. accuracy}\label{fig:1}
 \end{figure}
 
 \paragraph{PCA features.}
@@ -152,7 +178,7 @@ For this experiment, we computed the top-K principal component features such tha
 The results is shown in Figure \ref{fig:pca_features}.
 
 From the plot we can see that the number PCA features are 87 out of 784 features which explains 90\% variance in the data.
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.5\linewidth]{figures/pca_variance_vs_no_comp.png}
 \caption{PCA features. \label{fig:pca_features}}
@@ -163,6 +189,9 @@ From the plot we can see that the number PCA features are 87 out of 784 features
 \item We would run several experiments to plot ROC curves for different algorithms.
 \item We would run few experiments for all algorithms on the PCA features. 
 \item Finally we would  run 10-fold cross validation for all the algorithms to do hypothesis testing to compare different algorithms.
+\item We will include representative ROC curves for the 10-fold cross validation used for parameter tuning and for the test data-set that we would use for the hypothesis testing for choosing the best algorithm.
+\item We will try to run more experiments for SVM (using RBF kernels) and generate results (This is tentative and we might not be able to finish it).
+\item We will include data about run-times for different algorithms / parameter settings and discuss how that might be a deciding factor in selecting the parameters for different algorithms.
 \end{itemize} 
 \end{document}
 
