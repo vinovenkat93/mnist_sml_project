@@ -9,9 +9,11 @@ MNIST_data = namedtuple("MNIST_data", "data, target")
 
 def get_MNIST_data():
     if platform == "darwin": # Mac OS
-        data_dir = "../MNIST_Data"
+        data_dir = "../../MNIST_Data"
     elif platform == "win32": # Windows
         data_dir = "D:\\Vinoth\\Course_work\\CS 578\\Project\\MNIST_Data"
+    elif platform == "linux" or platform == "linux2": # Linux
+        data_dir = "../MNIST_Data"
 
     mnist = fetch_mldata('MNIST original', data_home = data_dir)
     return mnist
