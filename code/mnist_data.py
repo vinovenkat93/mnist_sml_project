@@ -99,8 +99,9 @@ def MNIST_pca(mnist):
     plt.title('Variance vs. No. of components', fontweight='bold')
     plt.grid(linestyle='--')
 #    plt.savefig('..\Results_Plots\pca_variance_vs_no_comp.png',dpi = 600)
-    plt.show()
-    train_pca = pca.fit_transform(mnist_data_centered[:60000,:])
+#    plt.show()
+#    train_pca = pca.fit_transform(mnist_data_centered[:60000,:])
+    train_pca = pca.fit_transform(mnist_data_centered)
     
     return train_pca, mnist.data.mean(axis=0), pca.components_.T
     

@@ -159,9 +159,28 @@ def k_fold_CV_Learn_rate_Neural_Net():
 """
 Studying the effect of samples
 """
-#mnist_neural_net.neural_net_samples(alpha)
+def neural_net_tss():
+    alpha = 100
+    learn_rate = 0.002
+    act_fcn = 'logistic'
+    mnist_neural_net.neural_net_samples(alpha, learn_rate, act_fcn)
 
 """
 Optimizing the size of hidden layers
 """
 #mnist_neural_net.neural_net_layers_size()
+
+"""
+K- fold CV for hypothesis testing
+"""
+def k_fold_CV_hypothesis_test():
+    alpha = 100
+    learn_rate = 0.002
+    act_fcn = 'logistic'
+    accuracy, train_time, predict_time = mnist_neural_net.cross_validation_k_fold(alpha = alpha, 
+                       act_fcn = act_fcn,learn_rate=learn_rate, use_pca = True)
+    
+    np.savetxt("../experiments/expNN/neural_net_accuracy_hypo_test.csv", accuracy, delimiter=",", fmt="%.3f")
+    np.savetxt("../experiments/expNN/neural_net_train_time_hypo_test.csv", train_time, delimiter=",", fmt="%.3f")
+    np.savetxt("../experiments/expNN/neural_net_predict_time_hypo_test.csv", predict_time, delimiter=",", fmt="%.3f")
+    

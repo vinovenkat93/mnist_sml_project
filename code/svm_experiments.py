@@ -70,9 +70,21 @@ def k_fold_CV_regularization_SVM():
 # TODO: ROC curves for comparing models (SVM vs. KNN vs. Neural)
 
 """
-Effect of samples
+Studying the effect of samples
 """
-#mnist_svm.svm_linear_samples(C)
+def svm_tss():
+    C = 70
+    mnist_svm.svm_linear_samples(C)
+
 #mnist_svm.svm_rbf_samples(C)
 
-
+"""
+K- fold CV for hypothesis testing
+"""
+def k_fold_CV_hypothesis_test():
+    C = 70
+    accuracy, train_time, predict_time = mnist_svm.cross_validation_k_fold(C = C, use_pca=True)
+    
+    np.savetxt("../experiments/expSVM/svm_accuracy_hypo_test.csv", accuracy, delimiter=",", fmt="%.3f")
+    np.savetxt("../experiments/expSVM/svm_train_time_hypo_test.csv", train_time, delimiter=",", fmt="%.3f")
+    np.savetxt("../experiments/expSVM/svm_predict_time_hypo_test.csv", predict_time, delimiter=",", fmt="%.3f")

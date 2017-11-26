@@ -16,42 +16,52 @@ mnist_test = list()
 
 # Linear Kernel
 def svm_linear_samples(C):
-    accuracy = np.array([])
-    for k in xrange(60):    
-        mnist_train_k, mnist_test_k = mnist.MNIST_train_test_split_k(mnist_all, (k+1)*1000)
-        mnist_train.append(mnist_train_k)
-        mnist_test.append(mnist_test_k)
-        print "Number of training samples: {}".format((k+1)*1000)
-        
-        #Train using SVM (One v. One)
-        t0 = time.clock()
-        clf = OneVsOneClassifier(LinearSVC(C = C))
+    training_data_percentage = np.array([1,10,20,30,40,50,60,70,80,90,100]) * 0.01
+    stratified_rand_sample = mnist_utils.MNIST_Random_Sample_Stratified()
+    length = len(training_data_percentage)
+    svm_training_time = np.zeros((length,10), dtype=float)
+    svm_prediction_time = np.zeros((length,10), dtype=float)
+    svm_accuracy = np.zeros((length,10), dtype=float)
+
+    for k in xrange(length):
+        for i in range(10):
+            
+            mnist_train_k, mnist_test_k = stratified_rand_sample.sample_train_data(training_data_percentage[k])
+            
+            print "Number of training samples: {}".format(len(mnist_train_k.data))
+            print "Number of test samples:{}".format(len(mnist_test_k.data))
+            
+            # One hidden layer with 100 neurons.
+            t0 = time.clock()
+            clf = OneVsOneClassifier(LinearSVC(C = C))
         #    clf = LinearSVC() Slower because it uses OneVsRest by default
-        clf.fit(mnist_train_k.data, mnist_train_k.target)
-        execTime = time.clock() - t0; 
-        
-        print "Execution Time for SVM (Linear Kernel: One vs. One): {}".format(execTime)                             
-        y_pred = clf.predict(mnist_test_k.data)
-        
-        # Metrics
-        accuracy_i = metrics.accuracy_score(mnist_test_k.target, y_pred)    
-        accuracy = np.append(accuracy, accuracy_i)
-        
-        # ROC curves for each iteration for all classes
-        y_score = clf.decision_function(mnist_test_k.data);
-        
-        # Plot ROC curves
-        fig_filename = ".\Results_Plots\SVM_linear_ROC_samples_{}.png".format((k+1)*1000)
-        fig_title = "ROC_Linear_SVM"
-        res.plot_ROC_curve(mnist_test_k.target, y_score, fig_filename, fig_title)
+            clf.fit(mnist_train_k.data, mnist_train_k.target)
+            execTime = time.clock() - t0
+            svm_training_time[k][i] = execTime
+                        
+            print "Execution Time for SVM: {}".format(execTime)                         
+            
+            t0 = time.clock()          
+            y_pred = clf.predict(mnist_test_k.data)
+            execTime = time.clock() - t0
+            svm_prediction_time[k][i] = execTime
+            
+            accuracy_i = metrics.accuracy_score(mnist_test_k.target, y_pred)
+            svm_accuracy[k][i] = accuracy_i
+            
+            print "Accuracy: {}".format(accuracy_i)
+    
+    np.savetxt("../experiments/expSVM/svm_training_times_different_tss.csv", svm_training_time, delimiter=",", fmt="%.3f")
+    np.savetxt("../experiments/expSVM/svm_prediction_times_different_tss.csv", svm_prediction_time, delimiter=",", fmt="%.3f")
+    np.savetxt("../experiments/expSVM/svm_accuracy_different_tss.csv", svm_accuracy, delimiter=",", fmt="%.3f")
             
     plt.figure()
     plt.grid(linestyle='--')
-    plt.plot(np.arange(1000,61000,1000), accuracy,'b')
+    plt.plot(training_data_percentage * 100, np.mean(svm_accuracy,axis=1),'b')
     plt.title('Accuracy vs. number of samples',fontsize=14, fontweight='bold')
-    plt.xlabel('Number of samples')
+    plt.xlabel('Percentage of samples')
     plt.ylabel('Accuracy')
-    plt.savefig('..\Results_Plots\accuracy_vs_samples_linearsvm_default.png', dpi = 600)
+    plt.savefig('..\Results_Plots\accuracy_vs_samples_svm_tuned.png', dpi = 600)
     plt.show()
             
 # RBF kernel
@@ -91,7 +101,7 @@ def svm_rbf_samples(C):
     plt.title('Accuracy vs. number of samples',fontsize=14, fontweight='bold')
     plt.xlabel('Number of samples')
     plt.ylabel('Accuracy')
-    plt.savefig('..\Results_Plots\accuracy_vs_samples_rbfsvm_default.png', dpi = 600)
+#    plt.savefig('..\Results_Plots\accuracy_vs_samples_rbfsvm_default.png', dpi = 600)
     plt.show()                        
 
 # SVM Ensembles RBF
@@ -133,12 +143,16 @@ def svm_linear_param_C(C,train,test):
     
     return accuracy, y_score,execTime_train, execTime_predict
     
-def cross_validation_k_fold(C):
+def cross_validation_k_fold(C, use_pca = False):
     accuracy = np.zeros(10)
     train_time = np.zeros(10)
     predict_time = np.zeros(10)
 
-    mnist_cv = mnist_all
+    if not use_pca:
+        mnist_cv = mnist_all
+    else:
+        mnist_cv = mnist.MNIST_data(mnist_pca,mnist_all.target[:])
+        
     cv_obj = mnist_utils.MNIST_CV_Stratified(mnist_cv)
     
     for k in xrange(10):
@@ -152,7 +166,11 @@ def cross_validation_k_fold(C):
         
         print "Accuracy = {} for k = {} and C = {}".format(accuracy[k],k+1,C)
         
-        filename = '..\Results_Plots\SVM_linear_ROC_C_{}_k_{}.png'.format(C,k+1)
+        if not use_pca:
+            filename = '..\Results_Plots\SVM_linear_ROC_C_{}_k_{}.png'.format(C,k+1)
+        else:
+            filename = '..\Results_Plots\SVM_linear_ROC_C_{}_k_{}_using_pca.png'.format(C,k+1)
+            
         title = 'ROC_Linear_SVM'
         res.plot_ROC_curve(test.target,y_score,filename,title, True)
         

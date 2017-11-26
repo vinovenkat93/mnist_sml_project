@@ -8,6 +8,7 @@ import mnist_utils
 import time
 
 mnist_all = mnist.get_MNIST_data()
+mnist_pca, _, _ = mnist.MNIST_pca(mnist_all)
 
 mnist_train = list()
 mnist_test = list()
@@ -15,38 +16,54 @@ mnist_test = list()
 """
 Studying the effect of samples
 """
-def neural_net_samples(alpha):
-    accuracy = np.array([])
-    for k in xrange(60):  
-        mnist_train_k, mnist_test_k = mnist.MNIST_train_test_split_k(mnist_all, (k + 1)*1000)
-        mnist_train.append(mnist_train_k)
-        mnist_test.append(mnist_test_k)
-        
-        print "Number of training samples: {}".format((k+1)*1000)
-        
-        # One hidden layer with 100 neurons.
-        t0 = time.clock()
-        mlp = MLPClassifier(hidden_layer_sizes=(100), max_iter=200, alpha=alpha,
-                            solver='sgd', tol=1e-4, random_state=1,
-                            learning_rate_init=.001)
-        mlp.fit(mnist_train_k.data, mnist_train_k.target)
-        execTime = time.clock() - t0
-                    
-        print "Execution Time for Neural Net: {}".format(execTime)                         
-        
-        y_pred = mlp.predict(mnist_test_k.data)
-        accuracy_i = metrics.accuracy_score(mnist_test_k.target, y_pred)
-        accuracy = np.append(accuracy, accuracy_i)
-        
-        print "Accuracy: {}".format(accuracy_i)
-        
+def neural_net_samples(alpha, learn_rate, act_fcn):
+    training_data_percentage = np.array([1,10,20,30,40,50,60,70,80,90,100]) * 0.01
+    stratified_rand_sample = mnist_utils.MNIST_Random_Sample_Stratified()
+    length = len(training_data_percentage)
+    neural_net_training_time = np.zeros((length,10), dtype=float)
+    neural_net_prediction_time = np.zeros((length,10), dtype=float)
+    neural_net_accuracy = np.zeros((length,10), dtype=float)
+
+    for k in xrange(length):
+        for i in range(10):
+            
+            mnist_train_k, mnist_test_k = stratified_rand_sample.sample_train_data(training_data_percentage[k])
+            
+            print "Number of training samples: {}".format(len(mnist_train_k.data))
+            print "Number of test samples:{}".format(len(mnist_test_k.data))
+            
+            # One hidden layer with 100 neurons.
+            t0 = time.clock()
+            mlp = MLPClassifier(hidden_layer_sizes=(100), max_iter=200, alpha=alpha,
+                                solver='sgd', tol=1e-4, random_state=1,
+                                learning_rate_init=learn_rate, activation=act_fcn)
+            mlp.fit(mnist_train_k.data, mnist_train_k.target)
+            execTime = time.clock() - t0
+            neural_net_training_time[k][i] = execTime
+                        
+            print "Execution Time for Neural Net: {}".format(execTime)                         
+            
+            t0 = time.clock()          
+            y_pred = mlp.predict(mnist_test_k.data)
+            execTime = time.clock() - t0
+            neural_net_prediction_time[k][i] = execTime
+            
+            accuracy_i = metrics.accuracy_score(mnist_test_k.target, y_pred)
+            neural_net_accuracy[k][i] = accuracy_i
+            
+            print "Accuracy: {}".format(accuracy_i)
+    
+    np.savetxt("../experiments/expNN/neural_net_training_times_different_tss.csv", neural_net_training_time, delimiter=",", fmt="%.3f")
+    np.savetxt("../experiments/expNN/neural_net_prediction_times_different_tss.csv", neural_net_prediction_time, delimiter=",", fmt="%.3f")
+    np.savetxt("../experiments/expNN/neural_net_accuracy_different_tss.csv", neural_net_accuracy, delimiter=",", fmt="%.3f")
+    
     plt.figure()
     plt.grid(linestyle='--')
-    plt.plot(np.arange(1000,61000,1000), accuracy,'b')
+    plt.plot(training_data_percentage * 100, np.mean(neural_net_accuracy,axis=1),'b')
     plt.title('Accuracy vs. number of samples',fontsize=14, fontweight='bold')
-    plt.xlabel('Number of samples')
+    plt.xlabel('Percentage of samples')
     plt.ylabel('Accuracy')
-    plt.savefig('..\Results_Plots\accuracy_vs_samples_neural_net_default.png', dpi = 600)
+#    plt.savefig('..\Results_Plots\accuracy_vs_samples_neural_net_tuned.png', dpi = 600)
     plt.show()
 
 """
@@ -93,7 +110,7 @@ def neural_net_opt(alpha, act_fcn, learn_rate, train, test):
 """
 10-fold CV for param optimization
 """
-def cross_validation_k_fold(alpha = 'default', act_fcn = 'default', learn_rate = 'default'):
+def cross_validation_k_fold(alpha = 'default', act_fcn = 'default', learn_rate = 'default', use_pca = False):
     """
     :param alpha: Regularization term
     :param act_fcn: Activation function for the net
@@ -105,7 +122,11 @@ def cross_validation_k_fold(alpha = 'default', act_fcn = 'default', learn_rate =
     train_time = np.zeros(10)
     predict_time = np.zeros(10)
     
-    mnist_cv = mnist_all
+    if not use_pca:
+        mnist_cv = mnist_all
+    else:
+        mnist_cv = mnist.MNIST_data(mnist_pca,mnist_all.target[:])
+        
     cv_obj = mnist_utils.MNIST_CV_Stratified(mnist_cv)
     for k in xrange(10):
         
@@ -129,9 +150,12 @@ def cross_validation_k_fold(alpha = 'default', act_fcn = 'default', learn_rate =
         elif l == 1 and ac == 1:
             print "Accuracy = {} for k = {} and Alpha = {}".format(accuracy[k],k+1,alpha)
             filename = '..\Results_Plots\Neural_Net_linear_ROC_Alpha_{}_k_{}.png'.format(alpha,k+1)
-        else:
+        elif use_pca == False:
             print "Accuracy = {} for k = {} and Alpha = {}, Activation_fcn = {}, Learn_rate = {}".format(accuracy[k],k+1,alpha,act_fcn,learn_rate)
             filename = '..\Results_Plots\Neural_Net_linear_ROC_Alpha_{}_Act_fcn_{}_Learn_rate_{}_k_{}.png'.format(alpha,act_fcn,learn_rate,k+1)
+        else:
+            print "Accuracy = {} for k = {} and Alpha = {}, Activation_fcn = {}, Learn_rate = {}".format(accuracy[k],k+1,alpha,act_fcn,learn_rate)
+            filename = '..\Results_Plots\Neural_Net_linear_ROC_Alpha_{}_Act_fcn_{}_Learn_rate_{}_k_{}_using_pca.png'.format(alpha,act_fcn,learn_rate,k+1)
         
         # Generate ROC plot (all_classes, k-folds)
         title = 'ROC_Neural_Net'
