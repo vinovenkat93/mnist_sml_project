@@ -89,7 +89,7 @@ def neural_net_layers_size():
 """
 Optimizing neural net params         
 """
-def neural_net_opt(alpha, act_fcn, learn_rate, train, test):
+def neural_net_opt(alpha, act_fcn, learn_rate, train, test, k, use_pca=False):
     mlp = MLPClassifier(hidden_layer_sizes=(100), max_iter=200, alpha=alpha,
                             solver='sgd', tol=1e-4, random_state=1,
                             learning_rate_init=learn_rate, activation=act_fcn)
@@ -105,7 +105,17 @@ def neural_net_opt(alpha, act_fcn, learn_rate, train, test):
     accuracy = metrics.accuracy_score(test.target, y_pred)
     y_score = mlp.predict_proba(test.data);
     
-    return accuracy, y_score, execTime_train, execTime_predict
+    if use_pca:       
+        precision = metrics.precision_score(test.target, y_pred, average='weighted')
+        recall = metrics.recall_score(test.target, y_pred, average='weighted')
+        cm = metrics.confusion_matrix(test.target, y_pred)
+        classes = ['0','1','2','3','4','5','6','7','8','9']
+        filename = '..\Results_Plots\Neural_Net_Conf_matrix_Alpha_{}_Act_fcn_{}_Learn_rate_{}_k_{}_using_pca.png'.format(alpha,act_fcn,learn_rate,k+1)
+        res.confusion_matrix_plot(cm, classes, filename)
+        return accuracy, y_score, execTime_train, execTime_predict, precision, recall
+    
+    else:
+        return accuracy, y_score, execTime_train, execTime_predict
     
 """
 10-fold CV for param optimization
@@ -119,6 +129,8 @@ def cross_validation_k_fold(alpha = 'default', act_fcn = 'default', learn_rate =
     """
     a = 0; l = 0; ac = 0
     accuracy = np.zeros(10)
+    precision = np.zeros(10)
+    recall = np.zeros(10)
     train_time = np.zeros(10)
     predict_time = np.zeros(10)
     
@@ -138,7 +150,10 @@ def cross_validation_k_fold(alpha = 'default', act_fcn = 'default', learn_rate =
         if learn_rate == 'default': learn_rate = 1e-3; l = 1
         if act_fcn == 'default': act_fcn = 'relu'; ac = 1
         
-        accuracy[k], y_score, train_time[k], predict_time[k] = neural_net_opt(alpha, act_fcn, learn_rate, train, test)
+        if use_pca:
+            accuracy[k], y_score, train_time[k], predict_time[k], precision[k], recall[k] = neural_net_opt(alpha, act_fcn, learn_rate, train, test, k, True)
+        else:
+            accuracy[k], y_score, train_time[k], predict_time[k] = neural_net_opt(alpha, act_fcn, learn_rate, train, test, k)
         
         # Filename based on param being optimized
         if a == 1 and ac == 1:
@@ -160,5 +175,9 @@ def cross_validation_k_fold(alpha = 'default', act_fcn = 'default', learn_rate =
         # Generate ROC plot (all_classes, k-folds)
         title = 'ROC_Neural_Net'
         res.plot_ROC_curve(test.target,y_score,filename,title, True)
+    
+    if use_pca:
+        np.savetxt("../experiments/expNN/neural_net_precision_hypo_test.csv", precision, delimiter=",", fmt="%.3f")
+        np.savetxt("../experiments/expNN/neural_net_recall_hypo_test.csv", recall, delimiter=",", fmt="%.3f")
         
     return accuracy, train_time, predict_time

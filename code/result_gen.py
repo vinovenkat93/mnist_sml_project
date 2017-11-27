@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import metrics
 from scipy import interp
+import itertools
 
 def plot_ROC_curve(y_true,y_score, filename, title, all_class=False):
     fpr = dict()
@@ -58,4 +59,27 @@ def roc_curve_params(y_true, y_score, pos_label):
     
     return fpr, tpr, y_score[threshold_idxs]
     
+def confusion_matrix_plot(conf_mat, classes, filename):
+    conf_mat = conf_mat.astype('float') / conf_mat.sum(axis=1)[:, np.newaxis]
+    
+    plt.figure()
+    plt.imshow(conf_mat, interpolation='nearest', cmap=plt.cm.Reds)
+    plt.title('Confusion matrix', fontweight='bold')
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes)
+    plt.yticks(tick_marks, classes)
+
+    fmt = '.2f'
+    thresh = conf_mat.max() / 2.
+    for i, j in itertools.product(range(conf_mat.shape[0]), range(conf_mat.shape[1])):
+        plt.text(j, i, format(conf_mat[i, j], fmt),
+                 horizontalalignment="center",
+                 color="white" if conf_mat[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.savefig(filename, dpi=600)
+#    plt.show()
     

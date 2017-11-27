@@ -125,7 +125,7 @@ def svm_ensembles_rbf_samples():
         print "Accuracy: {}".format(metrics.accuracy_score(mnist_test_k.target, y_pred))
                          
 
-def svm_linear_param_C(C,train,test):
+def svm_linear_param_C(C,train,test,k,use_pca=False):
     
     clf = LinearSVC(C = C)
     
@@ -139,12 +139,24 @@ def svm_linear_param_C(C,train,test):
     
     # Metrics
     accuracy = metrics.accuracy_score(test.target, y_pred)
-    y_score = clf.decision_function(test.data);
+    y_score = clf.decision_function(test.data)
     
-    return accuracy, y_score,execTime_train, execTime_predict
+    if use_pca:       
+        precision = metrics.precision_score(test.target, y_pred, average='weighted')
+        recall = metrics.recall_score(test.target, y_pred, average='weighted')
+        cm = metrics.confusion_matrix(test.target, y_pred)
+        classes = ['0','1','2','3','4','5','6','7','8','9']
+        filename = '..\Results_Plots\SVM_Conf_matrix_C_{}_k_{}_using_pca.png'.format(C,k+1)
+        res.confusion_matrix_plot(cm, classes, filename)
+        return accuracy, y_score, execTime_train, execTime_predict, precision, recall
+    
+    else:
+        return accuracy, y_score, execTime_train, execTime_predict
     
 def cross_validation_k_fold(C, use_pca = False):
     accuracy = np.zeros(10)
+    precision = np.zeros(10)
+    recall = np.zeros(10)
     train_time = np.zeros(10)
     predict_time = np.zeros(10)
 
@@ -162,7 +174,10 @@ def cross_validation_k_fold(C, use_pca = False):
 #        train,test = mnist.MNIST_train_test_split_k(mnist_cv,54000,True,k+1)
         train, test = cv_obj.get_train_test_split(10, k)
         
-        accuracy[k], y_score, train_time[k], predict_time[k] = svm_linear_param_C(C,train,test)
+        if use_pca:
+            accuracy[k], y_score, train_time[k], predict_time[k], precision[k], recall[k] = svm_linear_param_C(C,train,test,k,True)
+        else:
+            accuracy[k], y_score, train_time[k], predict_time[k] = svm_linear_param_C(C,train,test,k)
         
         print "Accuracy = {} for k = {} and C = {}".format(accuracy[k],k+1,C)
         
@@ -173,5 +188,9 @@ def cross_validation_k_fold(C, use_pca = False):
             
         title = 'ROC_Linear_SVM'
         res.plot_ROC_curve(test.target,y_score,filename,title, True)
-        
+    
+    if use_pca:
+        np.savetxt("../experiments/expSVM/svm_precision_hypo_test.csv", precision, delimiter=",", fmt="%.3f")
+        np.savetxt("../experiments/expSVM/svm_recall_hypo_test.csv", recall, delimiter=",", fmt="%.3f")
+    
     return accuracy, train_time, predict_time
