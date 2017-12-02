@@ -184,3 +184,14 @@ def k_fold_CV_hypothesis_test():
     np.savetxt("../experiments/expNN/neural_net_train_time_hypo_test.csv", train_time, delimiter=",", fmt="%.3f")
     np.savetxt("../experiments/expNN/neural_net_predict_time_hypo_test.csv", predict_time, delimiter=",", fmt="%.3f")
     
+def k_fold_CV_hypothesis_test_without_PCA():
+    alpha = 100
+    learn_rate = 0.002
+    act_fcn = 'logistic'
+    accuracy, train_time, predict_time = mnist_neural_net.cross_validation_k_fold(alpha = alpha, 
+                       act_fcn = act_fcn,learn_rate=learn_rate)
+    
+    np.savetxt("../experiments/expNN/neural_net_accuracy_hypo_test_without_pca.csv", accuracy, delimiter=",", fmt="%.3f")
+    np.savetxt("../experiments/expNN/neural_net_train_time_hypo_test_without_pca.csv", train_time, delimiter=",", fmt="%.3f")
+    np.savetxt("../experiments/expNN/neural_net_predict_time_hypo_test_without_pca.csv", predict_time, delimiter=",", fmt="%.3f")
+    
