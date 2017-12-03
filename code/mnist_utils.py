@@ -2,6 +2,7 @@ from collections import namedtuple
 from sklearn.datasets import fetch_mldata
 import numpy as np
 from sys import platform
+from sklearn.decomposition import PCA
 
 MNIST_data = namedtuple("MNIST_data", "data, target")
 NUMBER_OF_CLASSES = 10
@@ -151,6 +152,22 @@ class MNIST_Random_Sample_Stratified:
 
         return mnist_train_sampled, self.mnist_test
 
+
+def MNIST_pca(mnist):
+    # Mean centering
+    mnist_data_centered = mnist.data - mnist.data.mean(axis=0)
+    pca = PCA()
+    pca.fit(mnist_data_centered)
+    var_explained = pca.explained_variance_ratio_()
+    n_components = np.min(np.where (np.cumsum(var_explained) > 0.9)) + 1
+    pc = pca.components_[:n_components, :].T
+    return pc
+
+
+def PCA_transform(mnist, pc):
+    mnist_data_centered = mnist.data - mnist.data.mean(axis=0)
+    transformed_data = mnist_data_centered.dot(pc)
+    return transformed_data
 
 
 def main():
