@@ -160,11 +160,11 @@ def cross_validation_k_fold(C, use_pca = False):
     train_time = np.zeros(10)
     predict_time = np.zeros(10)
 
-    if not use_pca:
-        mnist_cv = mnist_all
-    else:
-        mnist_cv = mnist.MNIST_data(mnist_pca,mnist_all.target[:])
-        
+#    if not use_pca:
+#        mnist_cv = mnist_all
+#    else:
+#        mnist_cv = mnist.MNIST_data(mnist_pca,mnist_all.target[:])
+    mnist_cv = mnist_all        
     cv_obj = mnist_utils.MNIST_CV_Stratified(mnist_cv)
     
     for k in xrange(10):
@@ -175,7 +175,10 @@ def cross_validation_k_fold(C, use_pca = False):
         train, test = cv_obj.get_train_test_split(10, k)
         
         if use_pca:
-            accuracy[k], y_score, train_time[k], predict_time[k], precision[k], recall[k] = svm_linear_param_C(C,train,test,k,True)
+            pc, mean = mnist_utils.MNIST_pca(train)
+            train_pca = mnist_utils.PCA_transform(train, pc, mean)
+            test_pca = mnist_utils.PCA_transform(test, pc, mean)
+            accuracy[k], y_score, train_time[k], predict_time[k], precision[k], recall[k] = svm_linear_param_C(C,train_pca,test_pca,k,True)
         else:
             accuracy[k], y_score, train_time[k], predict_time[k] = svm_linear_param_C(C,train,test,k)
         

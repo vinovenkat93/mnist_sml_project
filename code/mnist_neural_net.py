@@ -8,7 +8,7 @@ import mnist_utils
 import time
 
 mnist_all = mnist.get_MNIST_data()
-mnist_pca, _, _ = mnist.MNIST_pca(mnist_all)
+#mnist_pca, _, _ = mnist.MNIST_pca(mnist_all)
 
 mnist_train = list()
 mnist_test = list()
@@ -134,10 +134,11 @@ def cross_validation_k_fold(alpha = 'default', act_fcn = 'default', learn_rate =
     train_time = np.zeros(10)
     predict_time = np.zeros(10)
     
-    if not use_pca:
-        mnist_cv = mnist_all
-    else:
-        mnist_cv = mnist.MNIST_data(mnist_pca,mnist_all.target[:])
+#    if not use_pca:
+#        mnist_cv = mnist_all
+#    else:
+#        mnist_cv = mnist.MNIST_data(mnist_pca,mnist_all.target[:])
+    mnist_cv = mnist_all
         
     cv_obj = mnist_utils.MNIST_CV_Stratified(mnist_cv)
     for k in xrange(10):
@@ -151,7 +152,10 @@ def cross_validation_k_fold(alpha = 'default', act_fcn = 'default', learn_rate =
         if act_fcn == 'default': act_fcn = 'relu'; ac = 1
         
         if use_pca:
-            accuracy[k], y_score, train_time[k], predict_time[k], precision[k], recall[k] = neural_net_opt(alpha, act_fcn, learn_rate, train, test, k, True)
+            pc, mean = mnist_utils.MNIST_pca(train)
+            train_pca = mnist_utils.PCA_transform(train, pc, mean)
+            test_pca = mnist_utils.PCA_transform(test, pc, mean)
+            accuracy[k], y_score, train_time[k], predict_time[k], precision[k], recall[k] = neural_net_opt(alpha, act_fcn, learn_rate, train_pca, test_pca, k, True)
         else:
             accuracy[k], y_score, train_time[k], predict_time[k] = neural_net_opt(alpha, act_fcn, learn_rate, train, test, k)
         

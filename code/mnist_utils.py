@@ -158,16 +158,17 @@ def MNIST_pca(mnist):
     mnist_data_centered = mnist.data - mnist.data.mean(axis=0)
     pca = PCA()
     pca.fit(mnist_data_centered)
-    var_explained = pca.explained_variance_ratio_()
+    var_explained = pca.explained_variance_ratio_
     n_components = np.min(np.where (np.cumsum(var_explained) > 0.9)) + 1
     pc = pca.components_[:n_components, :].T
-    return pc
+    return pc, mnist.data.mean(axis=0)
 
 
-def PCA_transform(mnist, pc):
-    mnist_data_centered = mnist.data - mnist.data.mean(axis=0)
+def PCA_transform(mnist, pc, mean):
+    mnist_data_centered = mnist.data - mean
     transformed_data = mnist_data_centered.dot(pc)
-    return transformed_data
+    mnist_transform = MNIST_data(transformed_data, mnist.target)
+    return mnist_transform
 
 
 def main():

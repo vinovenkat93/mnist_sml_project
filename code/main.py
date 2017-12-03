@@ -3,7 +3,7 @@ import svm_experiments
 import mnist_knn
 
 """Neural Network (Parameter tuning)"""
-neural_net_experiments.k_fold_CV_regularization_Neural_Net()
+#neural_net_experiments.k_fold_CV_regularization_Neural_Net()
 #neural_net_experiments.k_fold_CV_Activation_fcn_Neural_Net()
 #neural_net_experiments.k_fold_CV_Learn_rate_Neural_Net()
 #neural_net_experiments.neural_net_tss()
@@ -22,6 +22,6 @@ neural_net_experiments.k_fold_CV_regularization_Neural_Net()
 #mnist_knn.knn_expt_for_varied_tss()
 
 """Hypothesis testing"""
-#neural_net_experiments.k_fold_CV_hypothesis_test()
-#svm_experiments.k_fold_CV_hypothesis_test()
+neural_net_experiments.k_fold_CV_hypothesis_test()
+svm_experiments.k_fold_CV_hypothesis_test()
 #neural_net_experiments.k_fold_CV_hypothesis_test_without_PCA()
