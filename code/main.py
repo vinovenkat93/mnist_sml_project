@@ -13,8 +13,7 @@ import mnist_knn
 
 """K-Nearest Neighbours (Parameter tuning)"""
 #mnist_knn.k_fold_cross_validation_for_choosing_k_in_knn()
-#mnist_knn.k_fold_cross_validation_for_choosing_k_in_knn_exp1()
-#mnist_knn.k_fold_cross_validation_for_choosing_k_in_knn_exp3()
+
 
 """Samples vs. accuracy experiments"""
 #neural_net_experiments.neural_net_tss()
