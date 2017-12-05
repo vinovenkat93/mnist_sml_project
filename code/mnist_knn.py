@@ -227,8 +227,8 @@ def k_fold_cross_validation_knn(use_pca = False):
         res.plot_ROC_curve(test.target,y_score,filename,title, True)
 
     if use_pca:
-        np.savetxt("../experiments/expKNN/knn_precision_hypo_test.csv", precision, delimiter=",", fmt="%.3f")
-        np.savetxt("../experiments/expKNN/knn_recall_hypo_test.csv", recall, delimiter=",", fmt="%.3f")
+        np.savetxt("../experiments/expKNN/knn_precision_hypo_test_with_pca.csv", precision, delimiter=",", fmt="%.3f")
+        np.savetxt("../experiments/expKNN/knn_recall_hypo_test_with_pca.csv", recall, delimiter=",", fmt="%.3f")
 
         np.savetxt("../experiments/expKNN/knn_accuracy_hypo_test_with_pca.csv", accuracy, delimiter=",", fmt="%.3f")
         np.savetxt("../experiments/expKNN/knn_train_time_hypo_test_with_pca.csv", train_time, delimiter=",", fmt="%.3f")
