@@ -134,18 +134,11 @@ def cross_validation_k_fold(alpha = 'default', act_fcn = 'default', learn_rate =
     train_time = np.zeros(10)
     predict_time = np.zeros(10)
     
-#    if not use_pca:
-#        mnist_cv = mnist_all
-#    else:
-#        mnist_cv = mnist.MNIST_data(mnist_pca,mnist_all.target[:])
     mnist_cv = mnist_all
         
     cv_obj = mnist_utils.MNIST_CV_Stratified(mnist_cv)
     for k in xrange(10):
-        
-#        mnist_cv = mnist.MNIST_data(mnist_pca, mnist_all.target[:60000])
-#        mnist_cv = mnist.MNIST_data(mnist_all.data[:60000,:], mnist_all.target[:60000])
-#        train,test = mnist.MNIST_train_test_split_k(mnist_cv,54000,True,k+1)
+
         train, test = cv_obj.get_train_test_split(10, k)
         if alpha == 'default': alpha = 1e-4; a = 1
         if learn_rate == 'default': learn_rate = 1e-3; l = 1

@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn import metrics
 from scipy import interp
 import itertools
+import hypothesis_testing
 
 def plot_ROC_curve(y_true,y_score, filename, title, all_class=False):
     fpr = dict()
@@ -12,7 +13,6 @@ def plot_ROC_curve(y_true,y_score, filename, title, all_class=False):
     mean_tpr = 0.0
     mean_fpr = np.linspace(0,1,100)
     for i in xrange(10):
-#        fpr[i], tpr[i], _ = metrics.roc_curve(y_true, y_score[:,i], pos_label = i)
         fpr[i], tpr[i], _ = roc_curve_params(y_true, y_score[:,i], pos_label = i)
         mean_tpr += interp(mean_fpr,fpr[i],tpr[i])
         mean_tpr[0] = 0
@@ -160,6 +160,50 @@ def plot_accuracy(accuracy_file_name, filename, plot_no):
         plt.title('C (regularization) optimization using the 10-fold CV')    
         plt.savefig(filename, dpi = 600)
         plt.show()
+
+def hypo_SVM_NN_PCA():
+    svm_accuracy = np.loadtxt("../experiments/expSVM/svm_accuracy_hypo_test.csv", delimiter=",")
+    nn_accuracy = np.loadtxt("../experiments/expNN/neural_net_accuracy_hypo_test.csv", delimiter=",")
+    
+    if (np.mean(svm_accuracy) > np.mean(nn_accuracy)):
+        x, x_alpha = hypothesis_testing.hypothesis_testing(svm_accuracy,nn_accuracy)
+        return "SVM" if x > x_alpha else "Equal"
+    else:
+        x, x_alpha = hypothesis_testing.hypothesis_testing(nn_accuracy,svm_accuracy)
+        return "Neural Network" if x > x_alpha else "Equal"
+    
+def hypo_SVM_NN_without_PCA():
+    svm_accuracy = np.loadtxt("../experiments/expSVM/svm_accuracy_vs_C.csv", delimiter=",")[11,:]
+    nn_accuracy = np.loadtxt("../experiments/expNN/neural_net_accuracy_hypo_test_without_pca.csv", delimiter=",")
+    
+    if (np.mean(svm_accuracy) > np.mean(nn_accuracy)):
+        x, x_alpha = hypothesis_testing.hypothesis_testing(svm_accuracy,nn_accuracy)
+        return "SVM" if x > x_alpha else "Equal"
+    else:
+        x, x_alpha = hypothesis_testing.hypothesis_testing(nn_accuracy,svm_accuracy)
+        return "Neural Network" if x > x_alpha else "Equal"
+    
+def hypo_SVM_PCA_vs_without_PCA():
+    svm_accuracy_PCA = np.loadtxt("../experiments/expSVM/svm_accuracy_hypo_test.csv", delimiter=",")
+    svm_accuracy_without_PCA = np.loadtxt("../experiments/expSVM/svm_accuracy_vs_C.csv", delimiter=",")[11,:]
+    
+    if (np.mean(svm_accuracy_PCA) > np.mean(svm_accuracy_without_PCA)):
+        x, x_alpha = hypothesis_testing.hypothesis_testing(svm_accuracy_PCA,svm_accuracy_without_PCA)
+        return "SVM_PCA" if x > x_alpha else "Equal"
+    else:
+        x, x_alpha = hypothesis_testing.hypothesis_testing(svm_accuracy_without_PCA,svm_accuracy_PCA)
+        return "SVM_without_PCA" if x > x_alpha else "Equal"
+    
+def hypo_NN_PCA_vs_without_PCA():
+    nn_accuracy_PCA = np.loadtxt("../experiments/expNN/neural_net_accuracy_hypo_test.csv", delimiter=",")
+    nn_accuracy_without_PCA = np.loadtxt("../experiments/expNN/neural_net_accuracy_hypo_test_without_pca.csv", delimiter=",")
+    
+    if (np.mean(nn_accuracy_PCA) > np.mean(nn_accuracy_without_PCA)):
+        x, x_alpha = hypothesis_testing.hypothesis_testing(nn_accuracy_PCA,nn_accuracy_without_PCA)
+        return "NN_PCA" if x > x_alpha else "Equal"
+    else:
+        x, x_alpha = hypothesis_testing.hypothesis_testing(nn_accuracy_without_PCA,nn_accuracy_PCA)
+        return "NN_without_PCA" if x > x_alpha else "Equal"
     
 def main():
 

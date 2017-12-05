@@ -33,8 +33,8 @@ def svm_linear_samples(C):
             
             # One hidden layer with 100 neurons.
             t0 = time.clock()
-            clf = OneVsOneClassifier(LinearSVC(C = C))
-        #    clf = LinearSVC() Slower because it uses OneVsRest by default
+#            clf = OneVsOneClassifier(LinearSVC(C = C))
+            clf = LinearSVC() # Slower because it uses OneVsRest by default
             clf.fit(mnist_train_k.data, mnist_train_k.target)
             execTime = time.clock() - t0
             svm_training_time[k][i] = execTime
@@ -160,18 +160,11 @@ def cross_validation_k_fold(C, use_pca = False):
     train_time = np.zeros(10)
     predict_time = np.zeros(10)
 
-#    if not use_pca:
-#        mnist_cv = mnist_all
-#    else:
-#        mnist_cv = mnist.MNIST_data(mnist_pca,mnist_all.target[:])
     mnist_cv = mnist_all        
     cv_obj = mnist_utils.MNIST_CV_Stratified(mnist_cv)
     
     for k in xrange(10):
         
-#        mnist_cv = mnist.MNIST_data(mnist_pca, mnist_all.target[:60000])
-#        mnist_cv = mnist.MNIST_data(mnist_all.data[:60000,:], mnist_all.target[:60000])
-#        train,test = mnist.MNIST_train_test_split_k(mnist_cv,54000,True,k+1)
         train, test = cv_obj.get_train_test_split(10, k)
         
         if use_pca:
