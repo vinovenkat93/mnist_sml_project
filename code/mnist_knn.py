@@ -4,10 +4,11 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn import metrics
 import time
 import numpy as np
+import result_gen as res
 
 mnist_all = mnist.get_MNIST_data()
 
-NCORES = 6
+NCORES = 2
 NFOLDS = 10
 
 
@@ -61,7 +62,7 @@ def k_fold_cross_validation_for_choosing_k_in_knn():#CV with stratification
     np.savetxt("../experiments/exp5/knn_training_data_class_counts.csv", knn_training_data_class_count, delimiter=",", fmt="%.3f")
     np.savetxt("../experiments/exp5/knn_test_data_class_counts.csv", knn_test_data_class_count, delimiter=",", fmt="%.3f")
 
-
+'''
 def k_fold_cross_validation_for_choosing_k_in_knn_exp1():
     k_values = [1,2,3,4,5,10,15,20,25]
     knn_training_time = np.zeros((6,9), dtype=float)
@@ -140,7 +141,7 @@ def k_fold_cross_validation_for_choosing_k_in_knn_exp3():
     np.savetxt("../experiments/knn_accuracy_varied_cv.csv", knn_training_time, delimiter=",", fmt="%.3f")
     np.savetxt("knn_training_times_cv.csv", knn_prdiction_time, delimiter=",", fmt="%.3f")
     np.savetxt("knn_prdiction_times_cv.csv", knn_accuracy, delimiter=",", fmt="%.3f")
-
+'''
 
 def knn_expt_for_varied_tss():
     # Varying the training set size [1,10,20,30,40,50,60,70,80,90,100] and
@@ -189,9 +190,91 @@ def knn_expt_for_varied_tss():
     np.savetxt("../experiments/exp6/knn_accuracy_different_tss.csv", knn_accuracy, delimiter=",", fmt="%.3f")
 
 
+def k_fold_cross_validation_knn(use_pca = False):
+
+    accuracy = np.zeros(10)
+    precision = np.zeros(10)
+    recall = np.zeros(10)
+    train_time = np.zeros(10)
+    predict_time = np.zeros(10)
+
+    k = 3 # Value of k chosen through CV.
+
+    cv_obj = mnist.MNIST_CV_Stratified(mnist_all)
+
+    for i in xrange(NFOLDS):
+        train, test = cv_obj.get_train_test_split(NFOLDS, i)
+
+        if use_pca:
+            # Generating PCA features on the training data and then
+            # applying those features to the test data
+            pc, mean = mnist.MNIST_pca(train)
+            train_pca = mnist.PCA_transform(train, pc, mean)
+            test_pca = mnist.PCA_transform(test, pc, mean)
+            accuracy[i], y_score, train_time[i], predict_time[i], precision[i], recall[i] = \
+                knn_k(k,train_pca,test_pca,i,True)
+        else:
+            accuracy[i], y_score, train_time[i], predict_time[i] = knn_k(k,train,test,i)
+
+        print "Accuracy = {} for fold = {} and K = {}".format(accuracy[i],i+1,k)
+
+        if not use_pca:
+            filename = '../experiments/expKNN/KNN_ROC_K_{}_fold_{}.pdf'.format(k,i+1)
+        else:
+            filename = '../experiments/expKNN/KNN_ROC_K_{}_fold_{}_using_pca.pdf'.format(k,i+1)
+
+        title = 'ROC_KNN'
+        res.plot_ROC_curve(test.target,y_score,filename,title, True)
+
+    if use_pca:
+        np.savetxt("../experiments/expKNN/knn_precision_hypo_test_with_pca.csv", precision, delimiter=",", fmt="%.3f")
+        np.savetxt("../experiments/expKNN/knn_recall_hypo_test_with_pca.csv", recall, delimiter=",", fmt="%.3f")
+
+        np.savetxt("../experiments/expKNN/knn_accuracy_hypo_test_with_pca.csv", accuracy, delimiter=",", fmt="%.3f")
+        np.savetxt("../experiments/expKNN/knn_train_time_hypo_test_with_pca.csv", train_time, delimiter=",", fmt="%.3f")
+        np.savetxt("../experiments/expKNN/knn_predict_time_hypo_test_with_pca.csv", predict_time, delimiter=",", fmt="%.3f")
+
+    else:
+        #return accuracy, train_time, predict_time
+        np.savetxt("../experiments/expKNN/knn_accuracy_hypo_test_without_pca.csv", accuracy, delimiter=",", fmt="%.3f")
+        np.savetxt("../experiments/expKNN/knn_train_time_hypo_test_without_pca.csv", train_time, delimiter=",", fmt="%.3f")
+        np.savetxt("../experiments/expKNN/knn_predict_time_hypo_test_without_pca.csv", predict_time, delimiter=",", fmt="%.3f")
+
+
+
+def knn_k(k, train, test, fold, use_pca=False):
+
+    knn = KNeighborsClassifier(n_neighbors = k, n_jobs=NCORES)
+
+    t0 = time.clock()
+    knn.fit(train.data, train.target)
+    execTime_train = time.clock() - t0
+
+    t0 = time.clock()
+    y_pred = knn.predict(test.data)
+    execTime_predict = time.clock() - t0
+
+    # Metrics
+    accuracy = metrics.accuracy_score(test.target, y_pred)
+    y_score = knn.predict_proba(test.data)
+
+    if use_pca:
+        precision = metrics.precision_score(test.target, y_pred, average='weighted')
+        recall = metrics.recall_score(test.target, y_pred, average='weighted')
+        cm = metrics.confusion_matrix(test.target, y_pred)
+        classes = ['0','1','2','3','4','5','6','7','8','9']
+        filename = '../experiments/expKNN/KNN_Conf_matrix_k_{}_fold_{}_using_pca.pdf'.format(k,fold+1)
+        res.confusion_matrix_plot(cm, classes, filename)
+        return accuracy, y_score, execTime_train, execTime_predict, precision, recall
+
+    else:
+        return accuracy, y_score, execTime_train, execTime_predict
+
+
 def main():
     #k_fold_cross_validation_for_choosing_k_in_knn()
-    knn_expt_for_varied_tss()
+    #knn_expt_for_varied_tss()
+    k_fold_cross_validation_knn(True) # Using PCA
 
 if __name__=="__main__":
     main()
