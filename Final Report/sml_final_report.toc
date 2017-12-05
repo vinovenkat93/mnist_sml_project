@@ -1,0 +1,27 @@
+\contentsline {section}{Introduction}{3}{section*.1}
+\contentsline {subsection}{Data set Preprocessing}{3}{section*.2}
+\contentsline {section}{Classification Algorithms}{3}{section*.3}
+\contentsline {subsection}{Support Vector Machines}{3}{section*.4}
+\contentsline {subsection}{K-Nearest Neighbors}{4}{section*.5}
+\contentsline {subsection}{Neural networks}{4}{section*.6}
+\contentsline {section}{Experimental Set-up}{4}{section*.7}
+\contentsline {subsection}{Stratified sampling}{5}{section*.8}
+\contentsline {subsection}{Implementation details}{5}{section*.9}
+\contentsline {subsubsection}{Receiver Operating Characteristic (ROC) curve}{5}{section*.10}
+\contentsline {subsubsection}{Confusion matrices}{6}{figure.caption.12}
+\contentsline {subsubsection}{Accuracy curve}{6}{figure.caption.14}
+\contentsline {subsubsection}{Hypothesis testing}{7}{section*.15}
+\contentsline {subsubsection}{Principal Component Analysis (PCA)}{8}{section*.16}
+\contentsline {subsubsection}{Other Miscellaneous Metrics}{8}{section*.17}
+\contentsline {section}{Experiments/Results}{8}{section*.18}
+\contentsline {subsection}{10-Fold Cross Validation For Parameter Tuning}{8}{section*.19}
+\contentsline {subsubsection}{Support Vector Machines}{8}{section*.20}
+\contentsline {subsubsection}{Neural Networks}{8}{section*.21}
+\contentsline {subsubsection}{K-Nearest Neighbors}{8}{section*.22}
+\contentsline {subsection}{Effect of number of samples on accuracy}{9}{figure.caption.25}
+\contentsline {subsection}{PCA features}{10}{figure.caption.27}
+\contentsline {subsection}{Hypothesis testing}{10}{figure.caption.29}
+\contentsline {subsubsection}{Comparison using PCA data}{11}{section*.30}
+\contentsline {subsubsection}{Comparison using actual data}{11}{section*.31}
+\contentsline {subsubsection}{Within algorithm comparison}{11}{section*.32}
+\contentsline {subsection}{Miscellaneous results}{11}{section*.33}
