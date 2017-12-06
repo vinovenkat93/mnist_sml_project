@@ -61,7 +61,7 @@ def svm_linear_samples(C):
     plt.title('Accuracy vs. number of samples',fontsize=14, fontweight='bold')
     plt.xlabel('Percentage of samples')
     plt.ylabel('Accuracy')
-    plt.savefig('..\Results_Plots\accuracy_vs_samples_svm_tuned.png', dpi = 600)
+    plt.savefig('../Results_Plots/accuracy_vs_samples_svm_tuned.png', dpi = 600)
     plt.show()
             
 # RBF kernel

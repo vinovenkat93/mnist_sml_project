@@ -63,7 +63,7 @@ def neural_net_samples(alpha, learn_rate, act_fcn):
     plt.title('Accuracy vs. number of samples',fontsize=14, fontweight='bold')
     plt.xlabel('Percentage of samples')
     plt.ylabel('Accuracy')
-#    plt.savefig('..\Results_Plots\accuracy_vs_samples_neural_net_tuned.png', dpi = 600)
+    plt.savefig('../Results_Plots/accuracy_vs_samples_neural_net_tuned.png', dpi = 600)
     plt.show()
 
 """

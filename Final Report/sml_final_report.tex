@@ -13,6 +13,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{amssymb}
+\usepackage{makecell}
 %\usepackage{algorithm}
 \usepackage[utf8]{inputenc}
 \usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
@@ -194,7 +195,7 @@ Confusion matrices are another way to study the performance of a classification 
 
 An example of a confusion matrix for the MNIST dataset is shown in Fig. \ref{fig:conf_eg}. The confusion matrix is being plotted as a colormap using the in-built capabilities of \texttt{matplotlib} Python package and each row represents the proportion of classification of each class being classified as different classes by a classifier. For a perfect classifier, the confusion matrix would be an identity matrix.
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.6\linewidth]{figures/confusion_example.png}
 \caption{Confusion matrix example \label{fig:conf_eg}}
@@ -240,7 +241,15 @@ All of these hypothesis tests were done with the results from the 10-fold cross 
 
 \addcontentsline{toc}{subsubsection}{Principal Component Analysis (PCA)}
 \subsubsection*{Principal Component Analysis (PCA)}
-\textbf{TODO} 
+Principal Component Analysis (PCA) is a common dimensionality reduction procedure that is used in statistics / machine learning for high dimensional data. After finding the principal components, we can select a few components in the order of maximum variance along these components and project the training data into this subspace.
+
+When a test data point comes in, we project it to the previously mentioned subspace and use the dimensionally reduced form of the data for prediction. We used this procedure for a few experiments as explained in the upcoming sections, albeit with a few considerations to make sure that we don't use any information from the test data:
+
+\begin{itemize}
+\item{\textbf{10-fold cross validation.}} Whenever we perform cross-validation and we use PCA for dimensionality reduction, we make sure that we perform PCA to only the \texttt{9-folds} of data that is being considered as the \texttt{training set}. So the PCA matrix and mean values that are obtained for these data are then used to: \textbf{(i) center} the test data (the remaining 1-fold) and \textbf{(ii) project} that centered data to the subspace.
+
+\item{\textbf{Centering the data.}} The centering of the data is done only for the training set and the same mean is used for the test set to ensure that the data is being processed with respect to the same origin in the subspace
+\end{itemize}
  
 \addcontentsline{toc}{subsubsection}{Other Miscellaneous Metrics}
 \subsubsection*{Other Miscellaneous Metrics} 
@@ -255,45 +264,140 @@ Since we use a multi-class dataset, the precision and recall scores have been ca
 \addcontentsline{toc}{subsection}{10-Fold Cross Validation For Parameter Tuning}
 \subsection*{10-Fold Cross Validation For Parameter Tuning}
 
+For 10-fold cross validation we used stratified sampling using all 70,000 MNIST data. We first divided the whole data into 10 groups (data belonging to each digit from 0-9). Then  for each fold in 10-fold CV, we picked one fold from each group and combined them to form our test data set (approximately 7,000 data points) and rest of the data i.e. the other 9-folds were our training data set (approximately 63,000 data points). 
+
 \addcontentsline{toc}{subsubsection}{Support Vector Machines}
 \subsubsection*{Support Vector Machines}
+The results for SVM is shown in Fig. \ref{fig:svm_cv_param}. The figure shows the trend for ``\textit{Accuracy}'' as we vary the regularization parameter (C) for SVM. The plot shows both the mean and the variance of the accuracy values (from the cross-validation for each value of `C'). 
+
+\paragraph{Observations.}
+The C parameter is a measure of how much we want to avoid mis-classifying each training example. Large values of C will result in the hyperplane having a smaller margin and in cases where the data is separable, this would usually results in a better performing SVM with lesser misclassifications. Conversely, a a small value of C will cause the optimizer to look for a larger-margin separating hyperplane, even if that hyperplane misclassifies more points. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{figures/SVM_regularization_C_mean_acc_error_bar.png}
+\caption{10-fold CV (Parameter tuning) for SVM \label{fig:svm_cv_param}}
+\end{figure}
+
+An interesting thing that we observed while tuning the parameter `C' for our dataset is the \textit{absence} of a clear trend while changing the parameter value. As can be seen from the plot, we had a higher density of values for `C' at the lower range in order to study the effect of the parameter better. However, the trend of the variance and mean in accuracy suggests that the data (MNIST) is \textbf{\textit{not linearly separable}} causing the hyperplane to misclassify points even at high values of `C' and hence the effect of C is very minimal in this dataset. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\linewidth]{figures/{SVM_linear_ROC_C_0.01_k_1}.png}%
+\includegraphics[width=0.5\linewidth]{figures/{SVM_linear_ROC_C_2.0_k_1}.png}%
+\linebreak
+\includegraphics[width=0.5\linewidth]{figures/{SVM_linear_ROC_C_40.0_k_1}.png}%
+\includegraphics[width=0.5\linewidth]{figures/{SVM_linear_ROC_C_70.0_k_1}.png}%
+\linebreak
+\includegraphics[width=0.5\linewidth]{figures/{SVM_linear_ROC_C_100.0_k_1}.png}%
+\caption{ROC curves with AUC for the mean curve for $C = 0.01, 2, 40, 70, 100$ (Going from Left to Right and Top to Bottom)} 
+\label{fig:roc_c_svm}
+\end{figure}
+
+After performing these experiments, the hyper-parameter C for SVM was selected to be $\mathbf{70}$. This was the highest value in the plot and hence was chosen even though the trend does not suggest an obvious answer. Apart from the accuracy curve, the performance was also studied using ROC curves while changing the values of `C'. The results are shown in Fig. \ref{fig:roc_c_svm} for a few values of C. Along with the ROC curves, the Area Under Curve (AUC) metric is also included for the mean curve (which was found using the ``macro-averaging'' approach). The plots shown are all for the $1^{st}$ fold of the cross validation experiment. The plots for all the folds and for the entire range of the parameter is included in the submission folder. 
 
 \addcontentsline{toc}{subsubsection}{Neural Networks}
 \subsubsection*{Neural Networks}
+The results for Neural Networks is shown in Fig. \ref{fig:nn_cv}. Unlike SVM, where we just looked at one parameter to optimize, we optimized the neural net that we chose using three different parameters namely: the \texttt{activation function}, the \texttt{learning rate} for the backpropagation algorithm, and the regularization parameter $\mathtt{\alpha}$.
+
+\paragraph{Observations.}
+
+\begin{itemize}
+\item{\textbf{Activation function.}} We looked at three options for the activation function for the neurons in the NN: The logistic sigmoid function (\textbf{logistic}), the hyperbolic tan function (\textbf{tanh}) and the rectified linear unit function (\textbf{relu}). While the \textbf{relu} function just a max classifier ($f(x)=max(0,x)$), the other two are more involved and thus we expect better accuracy, which is the case as can be seen from the Figure. After running the CV, we chose the \textbf{logistic} activation function based on the results.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\linewidth]{figures/Neural_net_act_fcn_mean_acc_error_bar.png}%
+\includegraphics[width=0.5\linewidth]{figures/Neural_net_learn_rate_mean_acc_error_bar.png} %
+\linebreak 
+\includegraphics[width=0.5\linewidth]{figures/Neural_net_alpha_mean_acc_error_bar.png}
+\caption{CV for Neural networks. \label{fig:nn_cv}}
+\end{figure}
+
+\item{\textbf{Learning rate.}} Learning rate is NN is used to control the convergence to an optimal solution of the cost function. A larger learning rate might converge faster but might overshoot the optimal value, while a lower learning rate might take a long time to converge. Hence, we experimented with a range of values for the tuning, expecting a better accuracy for lower values. And the results met our expectations, giving us the best accuracy for a value of ($\eta$): 0.0003. While this comes at a price of higher training times, the compromise was not significant and in order to demonstrate this, a plot of the training times for the dataset for different values of the learning rate is shown in Fig. \ref{fig:train_time_nn}. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{figures/train_time_learn_rate_nn.png}
+\caption{Training time vs. Learn rate \label{fig:train_time_nn}}
+\end{figure}
+
+\item{\textbf{Regularization parameter:}} Like any other learning algorithm, the regularization parameter here helps in reducing an \textbf{overfit} of the training data and having the trained algorithm to have a robust classifying behavior when it sees the test data. We used a range of values, and in order to have a bigger picture of the effect of the parameter, a \textbf{logscale} was used as shown in Fig. \ref{fig:nn_cv}. From these observations, a value of ($\alpha$): $100$ is picked as the best tuned parameter.  
+  
+\begin{figure}
+\centering
+\includegraphics[width=0.5\linewidth]{figures/{Neural_Net_linear_ROC_Alpha_0.0001_k_1}.png}%
+\includegraphics[width=0.5\linewidth]{figures/{Neural_Net_linear_ROC_Alpha_0.001_k_1}.png}%
+\linebreak
+\includegraphics[width=0.5\linewidth]{figures/{Neural_Net_linear_ROC_Alpha_1.0_k_1}.png}%
+\includegraphics[width=0.5\linewidth]{figures/{Neural_Net_linear_ROC_Alpha_100.0_k_1}.png}%
+\linebreak
+\includegraphics[width=0.5\linewidth]{figures/{Neural_Net_linear_ROC_Alpha_10000.0_k_1}.png}%
+\caption{ROC curves with AUC for the mean curve for $\alpha = 10^{-5}, 10^{-4}, 10^{-1}, 10^{2}, 10^{3}$ (Going from Left to Right and Top to Bottom)} 
+\label{fig:roc_alp_nn}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\linewidth]{figures/{Neural_Net_linear_ROC_Learn_rate_0.0001_k_1}.png}%
+\includegraphics[width=0.5\linewidth]{figures/{Neural_Net_linear_ROC_Learn_rate_0.0005_k_1}.png}%
+\linebreak
+\includegraphics[width=0.5\linewidth]{figures/{Neural_Net_linear_ROC_Learn_rate_0.0011_k_1}.png}%
+\includegraphics[width=0.5\linewidth]{figures/{Neural_Net_linear_ROC_Learn_rate_0.0015_k_1}.png}%
+\linebreak
+\includegraphics[width=0.5\linewidth]{figures/{Neural_Net_linear_ROC_Learn_rate_0.0019_k_1}.png}%
+\caption{ROC curves with AUC for the mean curve for $Learn\_rate = 10^{-5}, 5^{-5}, 11^{-4}, 15^{-4}, 19^{-4}$ (Going from Left to Right and Top to Bottom)} 
+\label{fig:roc_lr_nn}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\linewidth]{figures/{Neural_Net_linear_ROC_Activation_fcn_logistic_k_1}.png}%
+\includegraphics[width=0.5\linewidth]{figures/{Neural_Net_linear_ROC_Activation_fcn_relu_k_1}.png}%
+\linebreak
+\includegraphics[width=0.5\linewidth]{figures/{Neural_Net_linear_ROC_Activation_fcn_tanh_k_1}.png}%
+\caption{ROC curves with AUC for the mean curve for Activation\_funciton = \texttt{logistic},\texttt{relu} and \texttt{tanh} (Going from Left to Right and Top to Bottom)} 
+\label{fig:roc_act_nn}
+\end{figure} 
+  
+\item{\textbf{Miscellaneous notes.}} Before optimizing these parameters, the size of the neural networks was also decided upon. This was done based on a combination of a review of existing literature for dealing with dataset (and similar datasets) and a set of experiments (refer to the code). After exhaustive experimentation, the size of the neural net was chosen to be $(784,100,10)$, a model which has a single hidden layer with $100$ neural units.	
+\end{itemize}
+
 
 \addcontentsline{toc}{subsubsection}{K-Nearest Neighbors}
 \subsubsection*{K-Nearest Neighbors}
-For 10-fold cross validation we used stratified sampling using all 70,000 MNIST data. We first divided the whole data into 10 groups (data belonging to each digit from 0-9). Then  for each fold in 10-fold CV, we picked one fold from each group and combined them to form our test data set (approximately 7,000 data points) and rest of the data i.e. the other 9-folds were our training data set (approximately 63,000 data points). The results are shown in Figure \ref{fig:svm_knn_cv} and \ref{fig:nn_cv}.
+The results are shown in Fig. \ref{fig:knn_cv_param}. 
 
-From the plots we see that, the hyper-parameter C for SVM was selected to be $\mathbf{70}$, value of K for KNN was selected to be $\mathbf{3}$ since the accuracy is highest at K=3, and in case of the neural networks, the following configuration was chosen: 
+\paragraph{Observations.}
 
-\begin{itemize}
-\item Regularization parameter ($\alpha$): $100$
-\item Activation function: Logistic
-\item Learning rate ($\eta$): 0.0003
-\end{itemize}
+\textbf{TODO}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.45\linewidth]{figures/SVM_regularization_C_mean_acc_error_bar.png}
 \includegraphics[width=0.4\linewidth]{figures/KNN_accuracy_vs_k_with_all_k_values.pdf}
-\caption{(Left) CV for SVM. (Right) CV for KNN. \label{fig:svm_knn_cv}}
+\caption{(Left) CV for SVM. (Right) CV for KNN. \label{fig:knn_cv_param}}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}
 \centering
-\includegraphics[width=0.33\linewidth]{figures/Neural_net_act_fcn_mean_acc_error_bar.png}%
-\includegraphics[width=0.33\linewidth]{figures/Neural_net_learn_rate_mean_acc_error_bar.png}%
-\includegraphics[width=0.33\linewidth]{figures/Neural_net_alpha_mean_acc_error_bar.png}
-\caption{CV for Neural networks. \label{fig:nn_cv}}
-\end{figure}
+\includegraphics[width=0.5\linewidth]{figures/{KNN_ROC_K_1_fold_1}.pdf}%
+\includegraphics[width=0.5\linewidth]{figures/{KNN_ROC_K_3_fold_1}.pdf}%
+\linebreak
+\includegraphics[width=0.5\linewidth]{figures/{KNN_ROC_K_5_fold_1}.pdf}%
+\includegraphics[width=0.5\linewidth]{figures/{KNN_ROC_K_15_fold_1}.pdf}%
+\linebreak
+\includegraphics[width=0.5\linewidth]{figures/{KNN_ROC_K_25_fold_1}.pdf}%
+\caption{ROC curves with AUC for the mean curve for $K = 1,3,5,15,25$ (Going from Left to Right and Top to Bottom)} 
+\label{fig:roc_k_knn}
+\end{figure} 
 
 \addcontentsline{toc}{subsection}{Effect of number of samples on accuracy}
 \subsection*{Effect of number of samples on accuracy}
 For this experiment,  we progressively varied the fraction of samples used for training from 1\% to 100\% out of the entire 60,000 samples using randomized stratified sampling, taking the fraction of data from each class (digits 0-9) and combining them to form the training data and computed the accuracy on the test data (fixed size 10,000) for each case. Here we fixed the hyper-parameters for respective algorithm found using CV. The results are shown in Figure \ref{fig:1}.
 
-From the plots we see that, approximately 20\% (12,000) of the training data points (60,000) is required for high accuracy. After 20\% data points, the accuracy 
-almost remains in the same range even if we increase the number of training data points.
+\textbf{TODO:} Maybe include a paragraph about the implementation / pseudocode for randomized stratified sampling
+
+From the plots we see that, approximately 20\% (12,000) of the training data points (60,000) is required for high accuracy. After 20\% data points, the accuracy almost remains in the same range even if we increase the number of training data points.
 
 \begin{figure}[H]
 	\centering
@@ -309,7 +413,7 @@ almost remains in the same range even if we increase the number of training data
 	\end{subfigure}
 	\begin{subfigure}{0.4\linewidth}
 		\centering
-		\includegraphics[width=1\linewidth]{figures/accuracy_vs_samples_neural_net_default}
+		\includegraphics[width=1\linewidth]{figures/accuracy_vs_samples_neural_net_tuned.png}
 		\caption{Neural Network}\label{fig:1b}
 	\end{subfigure}
 	\caption{Training set size vs. accuracy}\label{fig:1}
@@ -330,17 +434,178 @@ From the plot we can see that the number PCA features are 87 out of 784 features
 \addcontentsline{toc}{subsection}{Hypothesis testing}
 \subsection*{Hypothesis testing}
 
+The following sections contain the results of the hypothesis testing under various conditions and for different combinations. The results shown are basically the rejection or the acceptance of the null hypothesis (accepting $\mu_{1} = \mu_{2}$) when comparing between different algorithms under different settings.
+
+The parameters that have been used for each algorithm are the values that were found during the parameter tuning stage of the project. So, for all of these experiments, the parameter setting remain the same and the difference is mostly in the pre-processing of the data (performing PCA or not performing PCA). The aim of this was to study was two-fold:
+
+\begin{itemize}
+\item To understand the effect of performing PCA on the data and to see if the results are consistent with using the actual data. This should help us in reducing the training time overall since the PCA data would have low dimensionality. 
+
+\item To compare the algorithms that were used to classify the dataset.
+\end{itemize}
+
+
 \addcontentsline{toc}{subsubsection}{Comparison using PCA data}
 \subsubsection*{Comparison using PCA data}
+
+Here, all the results shown are experiments that were run using PCA data. The way in which the PCA data is being generated was described in a previous section and this method ensures that we don't use any information from the test data for training.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ c|c|c } 
+ \textbf{Experiment} & \textbf{Result} & \textbf{Inference} \\ 
+ \hline
+Neural Net vs. SVM & $x > x_{\alpha}$ & Neural Net ($\mu_{NN} > \mu_{SVM}$) Reject Null Hypothesis\\ 
+KNN vs. SVM & $x > x_{\alpha}$ &  KNN ($\mu_{KNN} > \mu_{SVM}$) Reject Null Hypothesis\\ 
+KNN vs. Neural Net & $x > x_{\alpha}$ &  KNN ($\mu_{KNN} > \mu_{NN}$) Reject Null Hypothesis \\
+\end{tabular}
+\caption{Hypothesis testing results (with PCA) \label{tab:hypo_test_pca}}
+\end{table}
+
+\paragraph{Observations.}
+\begin{itemize}
+\item{\textbf{Support Vector Machine.}} The results of the hypothesis testing test run for SVM is shown in Figs. \ref{fig:acc_svm_hypo_pca} and \ref{fig:hypo_pca_svm_roc_conf}. The first figure shows the accuracy variation over the 10-folds of CV experiment. The second figure shows the confusion matrix and ROC curve for the run for the $1^{st}$ fold. 
+
+These can be thought of to represent the best run of the algorithm since we use the optimized parameters. To get better perspectives of the experiment, the precision and recall curves have also been included in Fig. \ref{fig:hypo_pca_svm_pre_recl}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.45\linewidth]{figures/SVM_linear_ROC_C_70_k_1_using_pca.png} 
+\includegraphics[width=0.5\linewidth]{figures/SVM_Conf_matrix_C_70_k_1_using_pca.png}
+\caption{(Left) ROC curve. (Right) Confusion matrix [Hypothesis test SVM with PCA] \label{fig:hypo_pca_svm_roc_conf}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\linewidth]{figures/acc_svm_tuned_pca_hypo.png}
+\caption{Accurcay (SVM) over the 10-fold CV (Hypothesis testing - with PCA). \label{fig:acc_svm_hypo_pca}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.45\linewidth]{figures/precision_svm_tuned.png} 
+\includegraphics[width=0.45\linewidth]{figures/recall_svm_tuned.png}
+\caption{(Left) Precision curve. (Right) Recall curve. [Hypothesis test SVM with PCA] \label{fig:hypo_pca_svm_pre_recl}}
+\end{figure}
+
+\item{\textbf{Neural Network.}} The results for the Hypothesis run for Neural Network is shown in Figs \ref{fig:acc_nn_hypo_pca}, \ref{fig:hypo_pca_nn_pre_recl} and \ref{fig:hypo_pca_nn_roc_conf}. The results can be compared to the SVM runs and it is obvious that the Neural Net performs better than the SVM from a look at the plots for both. This is reflected in the hypothesis result table \ref{tab:hypo_test_pca}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.45\linewidth]{figures/{Neural_Net_linear_ROC_Alpha_100_Act_fcn_logistic_Learn_rate_0.002_k_1_using_pca}.png} 
+\includegraphics[width=0.5\linewidth]{figures/{Neural_Net_Conf_matrix_Alpha_100_Act_fcn_logistic_Learn_rate_0.002_k_1_using_pca}.png}
+\caption{(Left) ROC curve. (Right) Confusion matrix [Hypothesis test NN with PCA] \label{fig:hypo_pca_nn_roc_conf}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\linewidth]{figures/acc_nn_tuned_pca_hypo.png}
+\caption{Accurcay (NN) over the 10-fold CV (Hypothesis testing - with PCA). \label{fig:acc_nn_hypo_pca}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.45\linewidth]{figures/precision_nn_tuned.png} 
+\includegraphics[width=0.45\linewidth]{figures/recall_nn_tuned.png}
+\caption{(Left) Precision curve. (Right) Recall curve. [Hypothesis test NN with PCA] \label{fig:hypo_pca_nn_pre_recl}}
+\end{figure}
+
+\item{\textbf{K-Nearest Neighbors.}} The results for the Hypothesis run for KNN is shown in Figs . The results can be compared to the SVM and NN runs and it is obvious that the KNN performs better than both the SVM and NN from a look at the plots for both. This is reflected in the hypothesis result table \ref{tab:hypo_test_pca}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.45\linewidth]{figures/{KNN_ROC_K_3_fold_1_using_pca}.pdf} 
+\includegraphics[width=0.5\linewidth]{figures/{KNN_Conf_matrix_k_3_fold_1_using_pca}.pdf}
+\caption{(Left) ROC curve. (Right) Confusion matrix [Hypothesis test KNN with PCA] \label{fig:hypo_pca_knn_roc_conf}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\linewidth]{figures/pca_variance_vs_no_comp.png}
+\caption{Accurcay (KNN) over the 10-fold CV (Hypothesis testing - with PCA). \label{fig:acc_knn_hypo_pca}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.45\linewidth]{figures/pca_variance_vs_no_comp.png} 
+\includegraphics[width=0.45\linewidth]{figures/pca_variance_vs_no_comp.png}
+\caption{(Left) Precision curve. (Right) Recall curve. [Hypothesis test KNN with PCA] \label{fig:hypo_pca_knn_pre_recl}}
+\end{figure}
+
+\end{itemize}
 
 \addcontentsline{toc}{subsubsection}{Comparison using actual data}
 \subsubsection*{Comparison using actual data}
 
+The same set of experiments mentioned above were performed using the actual data without any pre-processing and are shown in the following sections for all the three algorithms. These data were used to perform Hypothesis testing for all combinations of algorithms and the results can be seen in the table below:
+
+\begin{table}[H] 
+\centering
+\begin{tabular}{ c|c|c }
+ \textbf{Experiment} & \textbf{Result} & \textbf{Inference} \\ 
+ \hline
+Neural Net vs. SVM & $x < x_{\alpha}$ & Equal ($\mu_{NN} = \mu_{SVM}$) Accept Null Hypothesis\\ 
+KNN vs. SVM & $x > x_{\alpha}$ &  KNN ($\mu_{KNN} > \mu_{SVM}$) Reject Null Hypothesis\\ 
+KNN vs. Neural Net & $x > x_{\alpha}$ &  KNN ($\mu_{KNN} > \mu_{NN}$) Reject Null Hypothesis \\
+\end{tabular}
+\caption{Hypothesis testing results (without PCA) \label{tab:hypo_test_actual}}
+\end{table}
+
+\paragraph{Observations.}
+
+\begin{itemize}
+\item{\textbf{Support Vector Machine.}} The results for the Hypothesis run for SVM with the actual data is shown in Fig \ref{fig:hypo_svm_roc_acc_act}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.45\linewidth]{figures/{SVM_linear_ROC_C_70.0_k_1}.png} 
+\includegraphics[width=0.45\linewidth]{figures/acc_svm_tuned_without_pca_hypo.png}
+\caption{(Left) ROC curve. (Right) Accuracy curve. [Hypothesis test SVM without PCA] \label{fig:hypo_svm_roc_acc_act}}
+\end{figure}
+
+\item{\textbf{Neural Network.}} The results for the Hypothesis run for NN with the actual data is shown in Fig \ref{fig:hypo_nn_roc_acc_act}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.45\linewidth]{figures/{Neural_Net_linear_ROC_Alpha_100_Act_fcn_logistic_Learn_rate_0.002_k_1}.png} 
+\includegraphics[width=0.45\linewidth]{figures/acc_nn_tuned_without_pca_hypo.png}
+\caption{(Left) ROC curve. (Right) Accuracy curve. [Hypothesis test NN without PCA] \label{fig:hypo_nn_roc_acc_act}}
+\end{figure}
+
+\item{\textbf{K-Nearest Neighbor.}} The results for the Hypothesis run for KNN with the actual data is shown in Fig \ref{fig:hypo_knn_roc_acc_act}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.45\linewidth]{figures/KNN_ROC_K_3_fold_1.pdf} 
+\includegraphics[width=0.45\linewidth]{figures/pca_variance_vs_no_comp.png}
+\caption{(Left) ROC curve. (Right) Accuracy curve. [Hypothesis test KNN without PCA] \label{fig:hypo_knn_roc_acc_act}}
+\end{figure}
+
+\end{itemize}
+
 \addcontentsline{toc}{subsubsection}{Within algorithm comparison}
 \subsubsection*{Within algorithm comparison}
 
-\addcontentsline{toc}{subsection}{Miscellaneous results}
-\subsection*{Miscellaneous results}
+Apart from the above comparisons, we performed hypothesis tests to compare the performance of these algorithms using PCA data vs. using the actual data. The results from these experiments are shown below. 
+
+\begin{table}[H] 
+\centering
+\begin{tabular}{ c|c|c }
+ \textbf{Experiment} & \textbf{Result} & \textbf{Inference} \\ 
+ \hline
+SVM (actual) vs. & $x > x_{\alpha}$ & SVM (actual data) ($\mu_{SVM\_actual} > \mu_{SVM\_pca}$) \\ 
+SVM (with PCA) & & Reject Null Hypothesis \\ 
+& & \\
+Neural Net (actual) vs. & $x < x_{\alpha}$ &  Equal ($\mu_{NN\_pca} = \mu_{NN\_actual}$) \\
+Neural Net (with PCA)  & & Accept Null Hypothesis\\ 
+& & \\
+KNN (actual) vs. & $x < x_{\alpha}$ &  Equal ($\mu_{KNN\_pca} = \mu_{KNN\_actual}$) \\
+KNN (with PCA)  & & Accept Null Hypothesis\\ 
+\end{tabular}
+\caption{Hypothesis testing with PCA vs. without PCA \label{tab:hypo_pca_vs_act}}
+\end{table}
+ 
+The results above show that while SVM performs better using the actual data, using Neural Network and KNN with PCA data produces similar performance as using the actual data. This provides a lot of flexibility in selecting the algorithm because using PCA data reduces the training time a lot. 
  
 \end{document}
 

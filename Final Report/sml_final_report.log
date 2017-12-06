@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99998 (MiKTeX 2.9.6350 64-bit) (preloaded format=xelatex 2017.7.29)  5 DEC 2017 18:05
+This is XeTeX, Version 3.14159265-2.6-0.99998 (MiKTeX 2.9.6350 64-bit) (preloaded format=xelatex 2017.7.29)  6 DEC 2017 17:59
 entering extended mode
 **./sml_final_report.tex
 (sml_final_report.tex
@@ -432,10 +432,25 @@ Package: subcaption 2016/05/22 v1.1-161 Sub-captions (AR)
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty"
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 )
+("C:\Program Files\MiKTeX 2.9\tex\latex\makecell\makecell.sty"
+Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\tools\array.sty"
+Package: array 2016/10/06 v2.4d Tabular extension package (FMi)
+\col@sep=\dimen134
+\extrarowheight=\dimen135
+\NC@list=\toks29
+\extratabsurround=\skip70
+\backup@length=\skip71
+)
+\rotheadsize=\dimen136
+\c@nlinenum=\count127
+\TeXr@lab=\toks30
+)
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\inputenc.sty"
 Package: inputenc 2015/03/17 v1.2c Input encoding file
-\inpenc@prehook=\toks29
-\inpenc@posthook=\toks30
+\inpenc@prehook=\toks31
+\inpenc@posthook=\toks32
 
 
 Package inputenc Warning: inputenc package ignored with utf8 based engines.
@@ -447,11 +462,11 @@ Invalid UTF-8 byte or sequence at line 284 replaced by U+FFFD.
 Invalid UTF-8 byte or sequence at line 299 replaced by U+FFFD.
 Invalid UTF-8 byte or sequence at line 550 replaced by U+FFFD.
 Package: algorithm2e 2017/07/18 v5.2 algorithms environments
-\c@AlgoLine=\count127
-\algocf@hangindent=\skip70
+\c@AlgoLine=\count128
+\algocf@hangindent=\skip72
  ("C:\Program Files\MiKTeX 2.9\tex\latex\ifoddpage\ifoddpage.sty"
 Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
-\c@checkoddpage=\count128
+\c@checkoddpage=\count129
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\tools\xspace.sty"
 Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
@@ -459,60 +474,60 @@ Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
 ("C:\Program Files\MiKTeX 2.9\tex\latex\ltxmisc\relsize.sty"
 Package: relsize 2003/07/04 ver 3.1
 )
-\skiptotal=\skip71
-\skiplinenumber=\skip72
-\skiprule=\skip73
-\skiphlne=\skip74
-\skiptext=\skip75
-\skiplength=\skip76
-\algomargin=\skip77
-\skipalgocfslide=\skip78
-\algowidth=\dimen134
-\inoutsize=\dimen135
-\inoutindent=\dimen136
-\interspacetitleruled=\dimen137
-\interspacealgoruled=\dimen138
-\interspacetitleboxruled=\dimen139
-\algocf@ruledwidth=\skip79
+\skiptotal=\skip73
+\skiplinenumber=\skip74
+\skiprule=\skip75
+\skiphlne=\skip76
+\skiptext=\skip77
+\skiplength=\skip78
+\algomargin=\skip79
+\skipalgocfslide=\skip80
+\algowidth=\dimen137
+\inoutsize=\dimen138
+\inoutindent=\dimen139
+\interspacetitleruled=\dimen140
+\interspacealgoruled=\dimen141
+\interspacetitleboxruled=\dimen142
+\algocf@ruledwidth=\skip81
 \algocf@inoutbox=\box33
 \algocf@inputbox=\box34
-\AlCapSkip=\skip80
-\AlCapHSkip=\skip81
-\algoskipindent=\skip82
+\AlCapSkip=\skip82
+\AlCapHSkip=\skip83
+\algoskipindent=\skip84
 \algocf@nlbox=\box35
 \algocf@hangingbox=\box36
 \algocf@untilbox=\box37
-\algocf@skipuntil=\skip83
+\algocf@skipuntil=\skip85
 \algocf@capbox=\box38
-\algocf@lcaptionbox=\skip84
-\algoheightruledefault=\skip85
-\algoheightrule=\skip86
-\algotitleheightruledefault=\skip87
-\algotitleheightrule=\skip88
-\c@algocfline=\count129
-\c@algocfproc=\count130
-\c@algocf=\count131
+\algocf@lcaptionbox=\skip86
+\algoheightruledefault=\skip87
+\algoheightrule=\skip88
+\algotitleheightruledefault=\skip89
+\algotitleheightrule=\skip90
+\c@algocfline=\count130
+\c@algocfproc=\count131
+\c@algocf=\count132
 \algocf@algoframe=\box39
 \algocf@algobox=\box40
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\listings.sty"
-\lst@mode=\count132
+\lst@mode=\count133
 \lst@gtempboxa=\box41
-\lst@token=\toks31
-\lst@length=\count133
-\lst@currlwidth=\dimen140
-\lst@column=\count134
-\lst@pos=\count135
-\lst@lostspace=\dimen141
-\lst@width=\dimen142
-\lst@newlines=\count136
-\lst@lineno=\count137
-\lst@maxwidth=\dimen143
+\lst@token=\toks33
+\lst@length=\count134
+\lst@currlwidth=\dimen143
+\lst@column=\count135
+\lst@pos=\count136
+\lst@lostspace=\dimen144
+\lst@width=\dimen145
+\lst@newlines=\count137
+\lst@lineno=\count138
+\lst@maxwidth=\dimen146
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
 File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
-\c@lstnumber=\count138
-\lst@skipnumbers=\count139
+\c@lstnumber=\count139
+\lst@skipnumbers=\count140
 \lst@framebox=\box42
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\listings.cfg"
@@ -530,37 +545,37 @@ LaTeX Warning: Label `sub@fig:1b' multiply defined.
 )
 \openout1 = `sml_final_report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 46.
-LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
 \AtBeginShipoutBox=\box43
-Package hyperref Info: Link coloring OFF on input line 46.
+Package hyperref Info: Link coloring OFF on input line 47.
  ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
 ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count140
+\c@section@level=\count141
 )
-LaTeX Info: Redefining \ref on input line 46.
-LaTeX Info: Redefining \pageref on input line 46.
-LaTeX Info: Redefining \nameref on input line 46.
+LaTeX Info: Redefining \ref on input line 47.
+LaTeX Info: Redefining \pageref on input line 47.
+LaTeX Info: Redefining \nameref on input line 47.
 
 (sml_final_report.out) (sml_final_report.out)
 \@outlinefile=\write4
@@ -569,13 +584,13 @@ LaTeX Info: Redefining \nameref on input line 46.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\c@lstlisting=\count141
-LaTeX Font Info:    Try loading font information for U+msa on input line 49.
+\c@lstlisting=\count142
+LaTeX Font Info:    Try loading font information for U+msa on input line 50.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 49.
+LaTeX Font Info:    Try loading font information for U+msb on input line 50.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -596,9 +611,9 @@ File: se-ascii-print.def 2016/05/16 v1.11 stringenc: Printable ASCII characters
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 182.
+nput line 183.
  (roc.py)
-Overfull \hbox (6.79999pt too wide) in paragraph at lines 182--183
+Overfull \hbox (6.79999pt too wide) in paragraph at lines 183--184
 [] 
  []
 
@@ -610,8 +625,17 @@ File: figures/confusion_example.png Graphic file (type bmp)
 File: figures/SVM_regularization_C_mean_acc_error_bar.png Graphic file (type bm
 p)
 <figures/SVM_regularization_C_mean_acc_error_bar.png>
-File: figures/KNN_accuracy_vs_k_with_all_k_values.pdf Graphic file (type pdf)
-<use figures/KNN_accuracy_vs_k_with_all_k_values.pdf>
+File: figures/SVM_linear_ROC_C_0.01_k_1.png Graphic file (type bmp)
+<figures/SVM_linear_ROC_C_0.01_k_1.png>
+File: figures/SVM_linear_ROC_C_2.0_k_1.png Graphic file (type bmp)
+<figures/SVM_linear_ROC_C_2.0_k_1.png>
+File: figures/SVM_linear_ROC_C_40.0_k_1.png Graphic file (type bmp)
+<figures/SVM_linear_ROC_C_40.0_k_1.png>
+File: figures/SVM_linear_ROC_C_70.0_k_1.png Graphic file (type bmp)
+<figures/SVM_linear_ROC_C_70.0_k_1.png>
+File: figures/SVM_linear_ROC_C_100.0_k_1.png Graphic file (type bmp)
+<figures/SVM_linear_ROC_C_100.0_k_1.png>
+ [9] [10]
 File: figures/Neural_net_act_fcn_mean_acc_error_bar.png Graphic file (type bmp)
 
 <figures/Neural_net_act_fcn_mean_acc_error_bar.png>
@@ -620,36 +644,144 @@ mp)
 <figures/Neural_net_learn_rate_mean_acc_error_bar.png>
 File: figures/Neural_net_alpha_mean_acc_error_bar.png Graphic file (type bmp)
 <figures/Neural_net_alpha_mean_acc_error_bar.png>
+ [11]
+File: figures/train_time_learn_rate_nn.png Graphic file (type bmp)
+<figures/train_time_learn_rate_nn.png>
+File: figures/Neural_Net_linear_ROC_Alpha_0.0001_k_1.png Graphic file (type bmp
+)
+<figures/Neural_Net_linear_ROC_Alpha_0.0001_k_1.png>
+File: figures/Neural_Net_linear_ROC_Alpha_0.001_k_1.png Graphic file (type bmp)
+
+<figures/Neural_Net_linear_ROC_Alpha_0.001_k_1.png>
+File: figures/Neural_Net_linear_ROC_Alpha_1.0_k_1.png Graphic file (type bmp)
+<figures/Neural_Net_linear_ROC_Alpha_1.0_k_1.png>
+File: figures/Neural_Net_linear_ROC_Alpha_100.0_k_1.png Graphic file (type bmp)
+
+<figures/Neural_Net_linear_ROC_Alpha_100.0_k_1.png>
+File: figures/Neural_Net_linear_ROC_Alpha_10000.0_k_1.png Graphic file (type bm
+p)
+<figures/Neural_Net_linear_ROC_Alpha_10000.0_k_1.png>
+File: figures/Neural_Net_linear_ROC_Learn_rate_0.0001_k_1.png Graphic file (typ
+e bmp)
+<figures/Neural_Net_linear_ROC_Learn_rate_0.0001_k_1.png>
+File: figures/Neural_Net_linear_ROC_Learn_rate_0.0005_k_1.png Graphic file (typ
+e bmp)
+<figures/Neural_Net_linear_ROC_Learn_rate_0.0005_k_1.png>
+File: figures/Neural_Net_linear_ROC_Learn_rate_0.0011_k_1.png Graphic file (typ
+e bmp)
+<figures/Neural_Net_linear_ROC_Learn_rate_0.0011_k_1.png>
+File: figures/Neural_Net_linear_ROC_Learn_rate_0.0015_k_1.png Graphic file (typ
+e bmp)
+<figures/Neural_Net_linear_ROC_Learn_rate_0.0015_k_1.png>
+File: figures/Neural_Net_linear_ROC_Learn_rate_0.0019_k_1.png Graphic file (typ
+e bmp)
+<figures/Neural_Net_linear_ROC_Learn_rate_0.0019_k_1.png>
+File: figures/Neural_Net_linear_ROC_Activation_fcn_logistic_k_1.png Graphic fil
+e (type bmp)
+<figures/Neural_Net_linear_ROC_Activation_fcn_logistic_k_1.png>
+File: figures/Neural_Net_linear_ROC_Activation_fcn_relu_k_1.png Graphic file (t
+ype bmp)
+<figures/Neural_Net_linear_ROC_Activation_fcn_relu_k_1.png>
+File: figures/Neural_Net_linear_ROC_Activation_fcn_tanh_k_1.png Graphic file (t
+ype bmp)
+<figures/Neural_Net_linear_ROC_Activation_fcn_tanh_k_1.png>
+File: figures/KNN_accuracy_vs_k_with_all_k_values.pdf Graphic file (type pdf)
+<use figures/KNN_accuracy_vs_k_with_all_k_values.pdf>
+ [12] [13] [14] [15]
+File: figures/KNN_ROC_K_1_fold_1.pdf Graphic file (type pdf)
+<use figures/KNN_ROC_K_1_fold_1.pdf>
+File: figures/KNN_ROC_K_3_fold_1.pdf Graphic file (type pdf)
+<use figures/KNN_ROC_K_3_fold_1.pdf>
+File: figures/KNN_ROC_K_5_fold_1.pdf Graphic file (type pdf)
+<use figures/KNN_ROC_K_5_fold_1.pdf>
+File: figures/KNN_ROC_K_15_fold_1.pdf Graphic file (type pdf)
+<use figures/KNN_ROC_K_15_fold_1.pdf>
+File: figures/KNN_ROC_K_25_fold_1.pdf Graphic file (type pdf)
+<use figures/KNN_ROC_K_25_fold_1.pdf>
 File: figures/accuracy_vs_samples_linearsvm_default.png Graphic file (type bmp)
 
 <figures/accuracy_vs_samples_linearsvm_default.png>
 File: figures/KNN_accuracy_vs_tss_with_fixed_k.pdf Graphic file (type pdf)
 <use figures/KNN_accuracy_vs_tss_with_fixed_k.pdf>
-File: figures/accuracy_vs_samples_neural_net_default.png Graphic file (type bmp
-)
-<figures/accuracy_vs_samples_neural_net_default.png>
- [9]
+File: figures/accuracy_vs_samples_neural_net_tuned.png Graphic file (type bmp)
+<figures/accuracy_vs_samples_neural_net_tuned.png>
+ [16] [17]
 File: figures/pca_variance_vs_no_comp.png Graphic file (type bmp)
 <figures/pca_variance_vs_no_comp.png>
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 345.
- [10] [11]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 345.
+ [18]
+File: figures/SVM_linear_ROC_C_70_k_1_using_pca.png Graphic file (type bmp)
+<figures/SVM_linear_ROC_C_70_k_1_using_pca.png>
+File: figures/SVM_Conf_matrix_C_70_k_1_using_pca.png Graphic file (type bmp)
+<figures/SVM_Conf_matrix_C_70_k_1_using_pca.png>
+ [19]
+File: figures/acc_svm_tuned_pca_hypo.png Graphic file (type bmp)
+<figures/acc_svm_tuned_pca_hypo.png>
+File: figures/precision_svm_tuned.png Graphic file (type bmp)
+<figures/precision_svm_tuned.png>
+File: figures/recall_svm_tuned.png Graphic file (type bmp)
+<figures/recall_svm_tuned.png>
+File: figures/Neural_Net_linear_ROC_Alpha_100_Act_fcn_logistic_Learn_rate_0.002
+_k_1_using_pca.png Graphic file (type bmp)
+<figures/Neural_Net_linear_ROC_Alpha_100_Act_fcn_logistic_Learn_rate_0.002_k_1_
+using_pca.png>
+File: figures/Neural_Net_Conf_matrix_Alpha_100_Act_fcn_logistic_Learn_rate_0.00
+2_k_1_using_pca.png Graphic file (type bmp)
+<figures/Neural_Net_Conf_matrix_Alpha_100_Act_fcn_logistic_Learn_rate_0.002_k_1
+_using_pca.png>
+ [20]
+File: figures/acc_nn_tuned_pca_hypo.png Graphic file (type bmp)
+<figures/acc_nn_tuned_pca_hypo.png>
+File: figures/precision_nn_tuned.png Graphic file (type bmp)
+<figures/precision_nn_tuned.png>
+File: figures/recall_nn_tuned.png Graphic file (type bmp)
+<figures/recall_nn_tuned.png>
+File: figures/KNN_ROC_K_3_fold_1_using_pca.pdf Graphic file (type pdf)
+<use figures/KNN_ROC_K_3_fold_1_using_pca.pdf>
+File: figures/KNN_Conf_matrix_k_3_fold_1_using_pca.pdf Graphic file (type pdf)
+<use figures/KNN_Conf_matrix_k_3_fold_1_using_pca.pdf>
+ [21]
+File: figures/pca_variance_vs_no_comp.png Graphic file (type bmp)
+<figures/pca_variance_vs_no_comp.png>
+File: figures/pca_variance_vs_no_comp.png Graphic file (type bmp)
+<figures/pca_variance_vs_no_comp.png>
+File: figures/pca_variance_vs_no_comp.png Graphic file (type bmp)
+<figures/pca_variance_vs_no_comp.png>
+
+[22]
+File: figures/SVM_linear_ROC_C_70.0_k_1.png Graphic file (type bmp)
+<figures/SVM_linear_ROC_C_70.0_k_1.png>
+File: figures/acc_svm_tuned_without_pca_hypo.png Graphic file (type bmp)
+<figures/acc_svm_tuned_without_pca_hypo.png>
+File: figures/Neural_Net_linear_ROC_Alpha_100_Act_fcn_logistic_Learn_rate_0.002
+_k_1.png Graphic file (type bmp)
+<figures/Neural_Net_linear_ROC_Alpha_100_Act_fcn_logistic_Learn_rate_0.002_k_1.
+png>
+File: figures/acc_nn_tuned_without_pca_hypo.png Graphic file (type bmp)
+<figures/acc_nn_tuned_without_pca_hypo.png>
+File: figures/KNN_ROC_K_3_fold_1.pdf Graphic file (type pdf)
+<use figures/KNN_ROC_K_3_fold_1.pdf>
+File: figures/pca_variance_vs_no_comp.png Graphic file (type bmp)
+<figures/pca_variance_vs_no_comp.png>
+ [23]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 610.
+ [24]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 610.
  (sml_final_report.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 345.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 345.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 610.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 610.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 345.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 610.
  ) 
 Here is how much of TeX's memory you used:
- 15721 strings out of 427827
- 237614 string characters out of 3152365
- 434130 words of memory out of 3000000
- 19524 multiletter control sequences out of 15000+200000
- 11033 words of font info for 55 fonts, out of 3000000 for 9000
+ 16109 strings out of 427827
+ 247811 string characters out of 3152365
+ 438040 words of memory out of 3000000
+ 19867 multiletter control sequences out of 15000+200000
+ 11545 words of font info for 59 fonts, out of 3000000 for 9000
  1328 hyphenation exceptions out of 8191
- 41i,10n,51p,8850b,1115s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,12n,51p,8850b,1115s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on sml_final_report.pdf (11 pages).
+Output written on sml_final_report.pdf (24 pages).
