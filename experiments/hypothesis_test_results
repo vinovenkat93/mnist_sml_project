@@ -1,0 +1,5 @@
+hypo_SVM_KNN_without_PCA: x=-38.268801, x_alpha=1.782288
+hypo_NN_KNN_without_PCA: x=-23.658549, x_alpha=1.795885
+hypo_SVM_KNN_PCA: x=-33.304403, x_alpha=1.812461
+hypo_NN_KNN_PCA: x=-31.215229, x_alpha=1.795885
+hypo_KNN_PCA_vs_without_PCA: x=3.029726, x_alpha=1.739607

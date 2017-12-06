@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import hypothesis_testing
 
 
 # Effect of samples
@@ -137,6 +138,45 @@ def plot_class_numbers(training_data_file_name, test_data_file_name):
     plt.savefig("plot_test_class_count.pdf", bbox_inches='tight')
 
 
+def hypo_SVM_KNN_without_PCA():
+    svm_accuracy = np.loadtxt("../experiments/expSVM/svm_accuracy_vs_C.csv", delimiter=",")[11,:]
+    knn_accuracy = np.loadtxt("../experiments/exp5/knn_accuracy_varied_cv_different_k.csv", delimiter=",")[2,:]
+
+    x, x_alpha = hypothesis_testing.hypothesis_testing(svm_accuracy,knn_accuracy)
+
+    print 'hypo_SVM_KNN_without_PCA: x=%f, x_alpha=%f' %(x, x_alpha)
+
+
+def hypo_NN_KNN_without_PCA():
+    nn_accuracy = np.loadtxt("../experiments/expNN/neural_net_accuracy_hypo_test_without_pca.csv", delimiter=",")
+    knn_accuracy = np.loadtxt("../experiments/exp5/knn_accuracy_varied_cv_different_k.csv", delimiter=",")[2,:]
+
+    x, x_alpha = hypothesis_testing.hypothesis_testing(nn_accuracy,knn_accuracy)
+    print 'hypo_NN_KNN_without_PCA: x=%f, x_alpha=%f' %(x, x_alpha)
+
+
+def hypo_SVM_KNN_PCA():
+    svm_accuracy = np.loadtxt("../experiments/expSVM/svm_accuracy_hypo_test.csv", delimiter=",")
+    knn_accuracy = np.loadtxt("../experiments/expKNN/knn_accuracy_hypo_test_with_pca.csv", delimiter=",")
+
+    x, x_alpha = hypothesis_testing.hypothesis_testing(svm_accuracy,knn_accuracy)
+    print 'hypo_SVM_KNN_PCA: x=%f, x_alpha=%f' %(x, x_alpha)
+
+
+def hypo_NN_KNN_PCA():
+    nn_accuracy = np.loadtxt("../experiments/expNN/neural_net_accuracy_hypo_test.csv", delimiter=",")
+    knn_accuracy = np.loadtxt("../experiments/expKNN/knn_accuracy_hypo_test_with_pca.csv", delimiter=",")
+
+    x, x_alpha = hypothesis_testing.hypothesis_testing(nn_accuracy,knn_accuracy)
+    print 'hypo_NN_KNN_PCA: x=%f, x_alpha=%f' %(x, x_alpha)
+
+
+def hypo_KNN_PCA_vs_without_PCA():
+    knn_accuracy_PCA = np.loadtxt("../experiments/expKNN/knn_accuracy_hypo_test_with_pca.csv", delimiter=",")
+    knn_accuracy_without_PCA = np.loadtxt("../experiments/exp5/knn_accuracy_varied_cv_different_k.csv", delimiter=",")[2,:]
+
+    x, x_alpha = hypothesis_testing.hypothesis_testing(knn_accuracy_PCA, knn_accuracy_without_PCA)
+    print 'hypo_KNN_PCA_vs_without_PCA: x=%f, x_alpha=%f' %(x, x_alpha)
 
 
 def main():

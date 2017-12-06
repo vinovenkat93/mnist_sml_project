@@ -4,6 +4,7 @@ import mnist_knn
 import hypothesis_testing
 import mnist_utils
 import result_gen
+import knn_plot_gen as hypo
 
 """Neural Network (Parameter tuning)"""
 #neural_net_experiments.k_fold_CV_regularization_Neural_Net()
@@ -35,7 +36,12 @@ Data generation for each algorithm
 ''' 
 Using data to perform hypothesis testing
 '''
-hypo_1 = result_gen.hypo_SVM_NN_PCA()
-hypo_2 = result_gen.hypo_SVM_NN_without_PCA()
-hypo_3 = result_gen.hypo_SVM_PCA_vs_without_PCA()
-hypo_4 = result_gen.hypo_NN_PCA_vs_without_PCA()
+#hypo_1 = result_gen.hypo_SVM_NN_PCA()
+#hypo_2 = result_gen.hypo_SVM_NN_without_PCA()
+#hypo_3 = result_gen.hypo_SVM_PCA_vs_without_PCA()
+#hypo_4 = result_gen.hypo_NN_PCA_vs_without_PCA()
+hypo.hypo_SVM_KNN_without_PCA()
+hypo.hypo_NN_KNN_without_PCA()
+hypo.hypo_SVM_KNN_PCA()
+hypo.hypo_NN_KNN_PCA()
+hypo.hypo_KNN_PCA_vs_without_PCA()
