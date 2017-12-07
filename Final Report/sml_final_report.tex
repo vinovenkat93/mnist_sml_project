@@ -366,10 +366,10 @@ The results for Neural Networks is shown in Fig. \ref{fig:nn_cv}. Unlike SVM, wh
 
 \addcontentsline{toc}{subsubsection}{K-Nearest Neighbors}
 \subsubsection*{K-Nearest Neighbors}
-The results are shown in Fig. \ref{fig:knn_cv_param}. 
+The results for KNN is shown in Fig. \ref{fig:knn_cv_param}. The figure shows the trend for ``\textit{Accuracy}'' as we vary the value K for KNN. The plot shows both the mean and the variance of the accuracy values (from the cross-validation for each value of `K'). 
 
 \paragraph{Observations.}
-The K parameter in KNN is basically the number of neighbor data points to look at before deciding which class the test point belong to. 
+The K parameter in KNN is basically the number of neighbor data points to look at before deciding which class the test point belong to. Therefore, larger K corresponds to computing the average label across a larger set  which in-turn leads to less overfitting. 
 
 \begin{figure}[H]
 \centering
@@ -378,7 +378,7 @@ The K parameter in KNN is basically the number of neighbor data points to look a
 \end{figure}
 
 From the figure we observe that the mean accuracy is high at both K=1 and K=3. But since the mean accuracy was little higher at K=3, we chose the value of K to be 3 for KNN. 
-We also observe that as we increase the value of K from 3 to to higher number, the accuracy of the test data monotonically decreases. So effect of K is evident from the plot for the MNIST dataset. 
+We also observe that as we increase the value of K from 5 to to higher number, the accuracy of the test data monotonically decreases. So effect of K is evident from the plot for the MNIST dataset. 
 
 Apart from the accuracy curve, the performance was also studied using ROC curves while changing the values of `K'. The results are shown in Fig. \ref{fig:roc_k_knn} for a few values of K. 
 
