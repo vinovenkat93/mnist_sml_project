@@ -4,11 +4,11 @@ import hypothesis_testing
 
 
 # Effect of samples
-def plot_results(tss, accuracy):
-    x = np.arange(tss.shape[0])
-    n = tss.shape[0]
-    x_labels = tss
-    plt.plot(tss,accuracy)
+def plot_results(file_name):
+    x = np.array([1,2,3,4,5,6,7,8,9,10])
+    #values = np.loadtxt(file_name , delimiter=',')
+    values = np.loadtxt(file_name, delimiter=",")[2,:]
+    plt.plot(x,values)
     '''
     xmin, xmax = plt.xlim()
     ymin, ymax = plt.ylim()
@@ -19,11 +19,13 @@ def plot_results(tss, accuracy):
     plt.xlim(xmin, xmax)
     plt.ylim(ymin, ymax)
     '''
-    plt.xticks(x, x_labels)
+    plt.xticks(x, x)
 
-    plt.xlabel("Training set size")
+    plt.xlabel("k-fold")
     plt.ylabel("Accuracy")
-    plt.savefig("plot_1.pdf", bbox_inches='tight')
+    plt.title("Accuracy(10-fold CV)")
+    plt.show()
+    #plt.savefig("plot_1.pdf", bbox_inches='tight')
 
 
 def plot_accuracy(accuracy_file_name):
@@ -186,7 +188,8 @@ def main():
     #plot_accuracy("./experiments/knn_accuracy_varied_cv.csv","./experiments/knn_accuracy_varied_cv_k234.csv", "./experiments/knn_training_times_cv.csv",
     #             "./experiments/knn_prdiction_times_cv.csv")
 
-    plot_accuracy("../experiments/exp6/knn_accuracy_different_tss.csv")
+    #plot_accuracy("../experiments/exp6/knn_accuracy_different_tss.csv")
+    plot_results("../experiments/exp5/knn_accuracy_varied_cv_different_k.csv")
 
 
 if __name__=="__main__":

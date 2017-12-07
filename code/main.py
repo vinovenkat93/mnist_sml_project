@@ -32,6 +32,7 @@ Data generation for each algorithm
 #neural_net_experiments.k_fold_CV_hypothesis_test()
 #svm_experiments.k_fold_CV_hypothesis_test()
 #neural_net_experiments.k_fold_CV_hypothesis_test_without_PCA()
+#mnist_knn.k_fold_cross_validation_knn()
 
 ''' 
 Using data to perform hypothesis testing

@@ -213,7 +213,7 @@ Once we have this information, the plot showing the variation of accuracy with v
 
 \addcontentsline{toc}{subsubsection}{Hypothesis testing}
 \subsubsection*{Hypothesis testing}
-Once we had all these performance metrics, we compared the performance of algorithms using hypothesis testing. The data from the 10-fold CV steps were used for comparing the algorithms. Given a pair of means $(\mu_{1}, mu_{2})$ and variances $(\sigma_1,\sigma_2)$, we determine:
+Once we had all these performance metrics, we compared the performance of algorithms using hypothesis testing. The data from the 10-fold CV steps were used for comparing the algorithms. Given a pair of means $(\mu_{1}, \mu_{2})$ and variances $(\sigma_1,\sigma_2)$, we determine:
 
 \begin{equation*}
 x = \frac{(\hat{\mu_1} - \hat{\mu_2})\sqrt{n}}{\sqrt{\hat{\sigma_1}^{2} + \hat{\sigma_2}^{2}}}
@@ -369,14 +369,18 @@ The results for Neural Networks is shown in Fig. \ref{fig:nn_cv}. Unlike SVM, wh
 The results are shown in Fig. \ref{fig:knn_cv_param}. 
 
 \paragraph{Observations.}
-
-\textbf{TODO}
+The K parameter in KNN is basically the number of neighbor data points to look at before deciding which class the test point belong to. 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.4\linewidth]{figures/KNN_accuracy_vs_k_with_all_k_values.pdf}
-\caption{(Left) CV for SVM. (Right) CV for KNN. \label{fig:knn_cv_param}}
+\caption{10-fold CV for KNN. \label{fig:knn_cv_param}}
 \end{figure}
+
+From the figure we observe that the mean accuracy is high at both K=1 and K=3. But since the mean accuracy was little higher at K=3, we chose the value of K to be 3 for KNN. 
+We also observe that as we increase the value of K from 3 to to higher number, the accuracy of the test data monotonically decreases. So effect of K is evident from the plot for the MNIST dataset. 
+
+Apart from the accuracy curve, the performance was also studied using ROC curves while changing the values of `K'. The results are shown in Fig. \ref{fig:roc_k_knn} for a few values of K. 
 
 \begin{figure}
 \centering
@@ -521,14 +525,14 @@ These can be thought of to represent the best run of the algorithm since we use 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\linewidth]{figures/pca_variance_vs_no_comp.png}
+\includegraphics[width=0.5\linewidth]{figures/accuracy_knn_PCA.png}
 \caption{Accurcay (KNN) over the 10-fold CV (Hypothesis testing - with PCA). \label{fig:acc_knn_hypo_pca}}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.45\linewidth]{figures/pca_variance_vs_no_comp.png} 
-\includegraphics[width=0.45\linewidth]{figures/pca_variance_vs_no_comp.png}
+\includegraphics[width=0.45\linewidth]{figures/precision_knn.png} 
+\includegraphics[width=0.45\linewidth]{figures/recall_knn.png}
 \caption{(Left) Precision curve. (Right) Recall curve. [Hypothesis test KNN with PCA] \label{fig:hypo_pca_knn_pre_recl}}
 \end{figure}
 
@@ -577,7 +581,7 @@ KNN vs. Neural Net & $x > x_{\alpha}$ &  KNN ($\mu_{KNN} > \mu_{NN}$) Reject Nul
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.45\linewidth]{figures/KNN_ROC_K_3_fold_1.pdf} 
-\includegraphics[width=0.45\linewidth]{figures/pca_variance_vs_no_comp.png}
+\includegraphics[width=0.45\linewidth]{figures/accuracy_knn_without_PCA.png}
 \caption{(Left) ROC curve. (Right) Accuracy curve. [Hypothesis test KNN without PCA] \label{fig:hypo_knn_roc_acc_act}}
 \end{figure}
 
