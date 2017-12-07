@@ -399,15 +399,13 @@ Apart from the accuracy curve, the performance was also studied using ROC curves
 \subsection*{Effect of number of samples on accuracy}
 For this experiment,  we progressively varied the fraction of samples used for training from 1\% to 100\% out of the entire 60,000 samples using randomized stratified sampling, taking the fraction of data from each class (digits 0-9) and combining them to form the training data and computed the accuracy on the test data (fixed size 10,000) for each case. Here we fixed the hyper-parameters for respective algorithm found using CV. The results are shown in Figure \ref{fig:1}.
 
-\textbf{TODO:} Maybe include a paragraph about the implementation / pseudocode for randomized stratified sampling
-
 From the plots we see that, approximately 20\% (12,000) of the training data points (60,000) is required for high accuracy. After 20\% data points, the accuracy almost remains in the same range even if we increase the number of training data points.
 
 \begin{figure}[H]
 	\centering
 	\begin{subfigure}{0.4\linewidth}
 		\centering
-		\includegraphics[width=1\linewidth]{figures/accuracy_vs_samples_linearsvm_default.png}
+		\includegraphics[width=1\linewidth]{figures/accuracy_vs_samples_svm_tuned.png}
 		\caption{SVM}\label{fig:1a}		
 	\end{subfigure}
 	\begin{subfigure}{0.35\linewidth}
@@ -610,6 +608,15 @@ KNN (with PCA)  & & Accept Null Hypothesis\\
 \end{table}
  
 The results above show that while SVM performs better using the actual data, using Neural Network and KNN with PCA data produces similar performance as using the actual data. This provides a lot of flexibility in selecting the algorithm because using PCA data reduces the training time a lot. 
+
+\begin{minipage}{\textwidth}
+\addcontentsline{toc}{subsection}{Conclusions} 
+\section*{Conclusions}
+
+\paragraph{} The project used various machine learning techniques to study the MNIST dataset to classify the input data in the form of pixel information of handwritten digits. We used various experimental techniques like PCA, Stratified sampling. Randomization, k-fold cross validation, hypothesis testing etc. to tune the parameters of these algorithms and to study their actual and relative performances. To show this, we have included an assortment of results in the form of various metrics like accuracy, precision, recall, ROC curves, AUC, etc. 
+
+\paragraph{} Looking at the results, we could conclude that KNN would be the best fit for this dataset, with the caveat that while we performed extensive experiments, we did not perform all possible permutations / exhaustive list of experiments, which could make the other algorithms perform better or provide similar performance trends as KNN.
+\end{minipage} 
  
 \end{document}
 

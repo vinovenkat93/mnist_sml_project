@@ -1,0 +1,28 @@
+External libraries required
+===========================
+Language (version): Python 2.7+
+Packages used: scikit-learn, numpy, scipy, matplotlib
+
+Running the code
+================
+After setting up the environment:
+- Run "main.py" to generate the results 
+- This should produce almost all of the plots
+- All the results (including execution time data which were not included 
+in the report) will be stored in corresponding .csv files with apprpriate names
+- Some plots like the Precision, Recall curves and a few plots for KNN were 
+plotted manually using the stored data
+- All the paths are relative, hence requiring no manual folder creation
+
+Using the dataset
+=================
+- While the dataset has been provided in the 'dataset' folder, the code is setup
+to download the dataset automatically
+- All the pre-processing is done in the code and requires no additional steps
+
+Suggestions
+===========
+- None of the experiments should take an exceptional amount of time to run
+- However, we suggest not running all the experiments at the same time. Instead, 
+please comment out suitable experiments in the main.py as they all run independantly
+- The experiments that were run have been named to be identified easily enough
